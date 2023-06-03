@@ -37,12 +37,11 @@ function main() {
 
 
   //skybox.rotation.x = rad(-90);
-
   
   function render(time) {
     //renderer.render(scene, camera);
     composer.render();
-  
+    moveCamera();
     requestAnimationFrame(render);
   }
   requestAnimationFrame(render);
@@ -55,6 +54,32 @@ main();
 function rad(deg) {
   return deg * (Math.PI/180);
 }
+
+let mousedown = false;
+let currentxy = [0,0];
+let lastxy = [0,0];
+document.addEventListener('mousedown', function() { 
+  mousedown = true;
+})
+document.addEventListener('mouseup', function() {
+  mousedown = false;
+})
+document.addEventListener('mousemove', function(ev) {
+  if (mousedown) {
+    currentxy = [ev.clientX, ev.clientY];
+  }
+})
+function moveCamera(camera) {
+  if (!mousedown) return;
+  let xchange = currentxy[0] - lastxy[0];
+  let ychange = currentxy[1] - lastxy[1];
+  if (xchange == 0 && ychange == 0) return;
+  console.log(xchange, ychange);
+  //IMPLEMENT CAMERA ROTATION HERE
+
+  lastxy = currentxy
+}
+
 
 function createSkybox(scene) {
   //order: front,back, up,down, right,left
