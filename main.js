@@ -1,9 +1,12 @@
 import './style.css'
 import * as THREE from 'three';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { GlitchPass } from 'three/addons/postprocessing/GlitchPass.js';
 
 function main() {
   const canvas = document.querySelector('#c');
-  const renderer = new THREE.WebGLRenderer({antialias: true, canvas});
+  const scene = new THREE.Scene();
 
   const fov = 75;
   const aspect = 2;  // the canvas default
@@ -12,32 +15,33 @@ function main() {
   const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
   camera.position.z = 2;
 
-  const scene = new THREE.Scene();
+  const renderer = new THREE.WebGLRenderer({antialias: false, canvas});
+  const composer = new EffectComposer( renderer );
+  const renderPass = new RenderPass( scene, camera );
+  composer.addPass( renderPass );
+  //const glitchPass = new GlitchPass();
+  //composer.addPass( glitchPass );
 
   const loader = new THREE.TextureLoader();
 
-  let skyboxSize = 10;
-  const sky_geom = new THREE.BoxGeometry(skyboxSize,skyboxSize,skyboxSize);
-  const test_mat = new THREE.MeshBasicMaterial({
+  const test_mat = new THREE.MeshPhongMaterial({
     //color: 0x7d7d7d,
     map: loader.load("resources/awkward_cat.jpg")
   });
-  const sky_mats = createSkyboxMaterials();
-  const skybox = new THREE.Mesh(sky_geom, sky_mats);
 
-  scene.add(skybox);
+  createSkybox(scene);
+  createOffice(scene);
 
   renderer.render(scene, camera);
+
+
 
   //skybox.rotation.x = rad(-90);
 
   
   function render(time) {
-    //time *= 0.001;  // convert time to seconds
-    //skybox.rotation.x = time;
-    //skybox.rotation.y = time;
-  
-    renderer.render(scene, camera);
+    //renderer.render(scene, camera);
+    composer.render();
   
     requestAnimationFrame(render);
   }
@@ -48,7 +52,11 @@ function main() {
 main();
 
 
-function createSkyboxMaterials() {
+function rad(deg) {
+  return deg * (Math.PI/180);
+}
+
+function createSkybox(scene) {
   //order: front,back, up,down, right,left
   let matArray = [];
   const loader = new THREE.TextureLoader();
@@ -90,10 +98,22 @@ function createSkyboxMaterials() {
   matArray.push(front); //done
   matArray.push(back); //done
 
-  return matArray;
+  let skyboxSize = 10;
+  const sky_geom = new THREE.BoxGeometry(skyboxSize,skyboxSize,skyboxSize);
+  const skybox = new THREE.Mesh(sky_geom, matArray);
+  scene.add(skybox);
 }
 
-function rad(deg) {
-  return deg * (Math.PI/180);
+
+function createOffice(scene) {
+  const floor_geom = new THREE.BoxGeometry(1,0.1,1);
+  const white_mat = new THREE.MeshBasicMaterial({
+    color:0xffffff,
+    //map: loader.load("resources/red.png")
+  }) 
+  const floor = new THREE.Mesh(floor_geom, white_mat);
+  floor.position.y = -0.5;
+  scene.add(floor);
 }
+
 
