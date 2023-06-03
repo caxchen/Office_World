@@ -1,12 +1,24 @@
-import './style.css'
+import '../style.css'
 import * as THREE from 'three';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { GlitchPass } from 'three/addons/postprocessing/GlitchPass.js';
 
+let mouse = {
+  mousedown: false,
+  firstDrag: false, 
+  currentxy: [0,0],
+  lastxy: [0,0],
+
+
+}
+
 function main() {
   const canvas = document.querySelector('#c');
   const scene = new THREE.Scene();
+
+  //setFullscreen();
+  //window.addEventListener('resize', ()=>{setFullscreen()})
 
   const fov = 75;
   const aspect = 2;  // the canvas default
@@ -30,7 +42,7 @@ function main() {
   });
 
   createSkybox(scene);
-  createOffice(scene);
+  createLayout(scene);
 
   renderer.render(scene, camera);
 
@@ -41,7 +53,7 @@ function main() {
   function render(time) {
     //renderer.render(scene, camera);
     composer.render();
-    moveCamera();
+    moveCamera(camera);
     requestAnimationFrame(render);
   }
   requestAnimationFrame(render);
@@ -55,29 +67,41 @@ function rad(deg) {
   return deg * (Math.PI/180);
 }
 
-let mousedown = false;
-let currentxy = [0,0];
-let lastxy = [0,0];
+
+function setFullscreen() {
+  const canvas = document.querySelector('#c');
+  canvas.width = document.body.clientWidth;
+  canvas.height = document.body.clientHeight;
+}
+
 document.addEventListener('mousedown', function() { 
-  mousedown = true;
+  mouse.mousedown = true;
+  mouse.firstDrag = true;
 })
 document.addEventListener('mouseup', function() {
-  mousedown = false;
+  mouse.mousedown = false;
 })
 document.addEventListener('mousemove', function(ev) {
-  if (mousedown) {
-    currentxy = [ev.clientX, ev.clientY];
-  }
-})
+  if (mouse.mousedown) {
+    mouse.currentxy = [ev.clientX, ev.clientY];
+    if (mouse.firstDrag) {
+      mouse.firstDrag = false;
+      mouse.lastxy = mouse.currentxy;
+    }
+  } 
+});
 function moveCamera(camera) {
-  if (!mousedown) return;
-  let xchange = currentxy[0] - lastxy[0];
-  let ychange = currentxy[1] - lastxy[1];
+  if (!mouse.mousedown) return;
+  let xchange = mouse.currentxy[0] - mouse.lastxy[0];
+  let ychange = mouse.currentxy[1] - mouse.lastxy[1];
   if (xchange == 0 && ychange == 0) return;
-  console.log(xchange, ychange);
   //IMPLEMENT CAMERA ROTATION HERE
+  
+  let sensitivity = 0.3;
+  camera.rotation.y += rad(xchange) * sensitivity;
+  //camera.rotation.y += rad(ychange) * sensitivity;
 
-  lastxy = currentxy
+  mouse.lastxy = mouse.currentxy;
 }
 
 
@@ -130,7 +154,7 @@ function createSkybox(scene) {
 }
 
 
-function createOffice(scene) {
+function createLayout(scene) {
   const floor_geom = new THREE.BoxGeometry(1,0.1,1);
   const white_mat = new THREE.MeshBasicMaterial({
     color:0xffffff,
