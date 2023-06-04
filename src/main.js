@@ -3,6 +3,8 @@ import * as THREE from 'three';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { GlitchPass } from 'three/addons/postprocessing/GlitchPass.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
 
 let mouse = {
   mousedown: false,
@@ -31,6 +33,7 @@ function main() {
   const composer = new EffectComposer( renderer );
   const renderPass = new RenderPass( scene, camera );
   composer.addPass( renderPass );
+  const controls = new OrbitControls( camera, renderer.domElement );
   //const glitchPass = new GlitchPass();
   //composer.addPass( glitchPass );
 
@@ -46,14 +49,22 @@ function main() {
 
   renderer.render(scene, camera);
 
+  //camera.rotation.y += rad(30);
+  //let axis = new THREE.Vector3(1,0,0);
+  //let up = new THREE.Vector3(0,1,0);
+  //axis.applyAxisAngle(up, camera.rotation.y);
+  //camera.rotateOnAxis(axis, rad(10))
+  //console.log(axis)
 
+  //camera.rotation.y = rad(30);
+  //camera.rotation.z = rad(20)
 
-  //skybox.rotation.x = rad(-90);
   
   function render(time) {
     //renderer.render(scene, camera);
     composer.render();
-    moveCamera(camera);
+    //moveCamera(camera);
+    controls.update();
     requestAnimationFrame(render);
   }
   requestAnimationFrame(render);
@@ -77,6 +88,8 @@ function setFullscreen() {
 document.addEventListener('mousedown', function() { 
   mouse.mousedown = true;
   mouse.firstDrag = true;
+
+
 })
 document.addEventListener('mouseup', function() {
   mouse.mousedown = false;
@@ -92,14 +105,34 @@ document.addEventListener('mousemove', function(ev) {
 });
 function moveCamera(camera) {
   if (!mouse.mousedown) return;
-  let xchange = mouse.currentxy[0] - mouse.lastxy[0];
-  let ychange = mouse.currentxy[1] - mouse.lastxy[1];
-  if (xchange == 0 && ychange == 0) return;
+  let horizontal = mouse.currentxy[0] - mouse.lastxy[0];
+  let vertical = mouse.currentxy[1] - mouse.lastxy[1];
+  if (horizontal == 0 && vertical == 0) return;
   //IMPLEMENT CAMERA ROTATION HERE
   
   let sensitivity = 0.3;
-  camera.rotation.y += rad(xchange) * sensitivity;
-  //camera.rotation.y += rad(ychange) * sensitivity;
+  //camera.rotation.y += rad(horizontal) * sensitivity;
+  //let savedy = camera.rotation.y;
+  //camera.rotation.y = 0;
+  //camera.rotation.x += rad(vertical) * sensitivity;
+  //camera.rotation.y = savedy + (rad(horizontal) * sensitivity);
+
+  //camera.rotateY(rad(horizontal) * sensitivity);
+  //camera.rotateX(rad(vertical) * sensitivity);
+  
+  //camera.rotation.y += rad(horizontal) * sensitivity;
+  //let axis = new THREE.Vector3(1,0,0);
+  //let up = new THREE.Vector3(0,1,0);
+  //axis.applyAxisAngle(up, camera.rotation.y);
+  //camera.rotateOnAxis(axis, rad(vertical) * sensitivity)
+  //console.log(axis)
+
+  //camera.rotation.y += rad(horizontal) * sensitivity;
+  let axis = new THREE.Vector3(1,0,0);
+  let up = new THREE.Vector3(0,1,0);
+  axis.applyAxisAngle(up, camera.rotation.y);
+  //camera.rotateOnAxis(axis, rad(vertical) * sensitivity)
+  console.log(axis)
 
   mouse.lastxy = mouse.currentxy;
 }
