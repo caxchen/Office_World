@@ -11,8 +11,6 @@ let mouse = {
   firstDrag: false, 
   currentxy: [0,0],
   lastxy: [0,0],
-
-
 }
 
 function main() {
@@ -27,14 +25,15 @@ function main() {
   const near = 0.1;
   const far = 100;
   const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-  camera.position.z = 3; //forward will be from - looking at +
+  camera.position.z = 1; //forward will be from - looking at +
   camera.position.y = 0;
 
-  const renderer = new THREE.WebGLRenderer({antialias: false, canvas});
+  const renderer = new THREE.WebGLRenderer({antialias: true, canvas});
   const composer = new EffectComposer( renderer );
   const renderPass = new RenderPass( scene, camera );
   composer.addPass( renderPass );
   const controls = new OrbitControls( camera, renderer.domElement );
+  controls.target = new THREE.Vector3(0,0,-2);
   //const glitchPass = new GlitchPass();
   //composer.addPass( glitchPass );
 
@@ -157,7 +156,13 @@ function createSkybox(scene) {
 function createLayout(scene) {
   const white_mat = new THREE.MeshPhongMaterial({
     color:0xffffff,
-  }) 
+  })
+  const darkerWhite_mat = new THREE.MeshPhongMaterial({
+    color:0xf0f0f0
+  })
+  const metal_mat = new THREE.MeshPhongMaterial({
+    color:0x8a8888
+  })
   let roomx = 6.5;
   let roomz = 5;
   let roomy = 2;
@@ -178,7 +183,7 @@ function createLayout(scene) {
   rightWall.position.x = -roomx / 2;
   scene.add(rightWall);
 
-  let fsx = (roomx/2) * 0.85;//front side x
+  let fsx = (roomx/2) * 0.87;//front side x
   const frontSideGeom = new THREE.BoxGeometry(fsx,roomy,thickness);
   const frontSideLeft = new THREE.Mesh(frontSideGeom, white_mat);
   frontSideLeft.position.z = - roomz/2;
@@ -188,6 +193,27 @@ function createLayout(scene) {
   frontSideRight.position.z = -roomz/2;
   frontSideRight.position.x = (roomx/2 - fsx/2);
   scene.add(frontSideRight);
+  let doorHeight = roomy * 0.66;
+  let doorWidth = (roomx - fsx*2) * 2;
+  const frontTopGeom = new THREE.BoxGeometry(doorWidth,roomy-doorHeight,thickness);
+  const frontTop = new THREE.Mesh(frontTopGeom, white_mat);
+  frontTop.position.z = -roomz/2;
+  frontTop.position.y = doorHeight/2;
+  scene.add(frontTop);
+  const doorGeom = new THREE.BoxGeometry(doorWidth, doorHeight, thickness*0.7);
+  const door = new THREE.Mesh(doorGeom, darkerWhite_mat);
+  door.position.z = -roomz/2;
+  door.position.y = -((roomy-doorHeight)/2)
+  scene.add(door);
+  //DOOR KNOB
+  //radiusTop radiusBottom height radialSegments
+  const doorKnob_geom = new THREE.CylinderGeometry( 1,1, 10, 7 );
+  doorKnob_geom.scale = 0.1;
+  const doorKnob = new THREE.Mesh(doorKnob_geom, metal_mat);
+  let doorKnobScale = 0.1;
+  //doorKnob.scale = new THREE.Vector3(doorKnobScale,doorKnobScale,doorKnobScale);
+  doorKnob.scale.set(doorKnobScale,doorKnobScale,doorKnobScale)
+  scene.add(doorKnob);
 }
 
 
