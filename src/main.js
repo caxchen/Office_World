@@ -28,14 +28,13 @@ function main() {
   const far = 100;
   const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
   camera.position.z = -1; //forward will be from - looking at +
-  camera.position.y = 0 + allHeight;
 
   const renderer = new THREE.WebGLRenderer({antialias: true, canvas});
   const composer = new EffectComposer( renderer );
   const renderPass = new RenderPass( scene, camera );
   composer.addPass( renderPass );
   const controls = new OrbitControls( camera, renderer.domElement );
-  controls.target = new THREE.Vector3(0,0+allHeight,2);
+  controls.target = new THREE.Vector3(0,0,2);
   //const glitchPass = new GlitchPass();
   //composer.addPass( glitchPass );
 
@@ -75,7 +74,6 @@ function addTestLighting(scene) {
   const ambient = new THREE.AmbientLight( 0x383838 );
   scene.add(ambient);
   const testLight = new THREE.PointLight( 0xededed );
-  testLight.position.y += allHeight;
   //testLight.position.y = 1
 
   scene.add(testLight);
@@ -152,6 +150,7 @@ function createSkybox(scene) {
   const sky_geom = new THREE.BoxGeometry(skyboxSize,skyboxSize,skyboxSize);
   const skybox = new THREE.Mesh(sky_geom, matArray);
   skybox.rotation.y = rad(90)
+  skybox.position.y -= allHeight;
   scene.add(skybox);
 }
 
@@ -187,21 +186,17 @@ function createLayout(scene) {
   const floor_geom = new THREE.BoxGeometry(roomx,thickness,roomz);
   const floor = new THREE.Mesh(floor_geom, white_mat);
   floor.position.y = -roomy / 2;
-  floor.position.y += allHeight;
   scene.add(floor);
   const roof = new THREE.Mesh(floor_geom, white_mat);
   roof.position.y = roomy / 2;
-  roof.position.y += allHeight;
   scene.add(roof);
 
   const sideWallGeom = new THREE.BoxGeometry(thickness,roomy,roomz);
   const leftWall = new THREE.Mesh(sideWallGeom, white_mat);
   leftWall.position.x = roomx / 2;
-  leftWall.position.y += allHeight;
   scene.add(leftWall);
   const rightWall = new THREE.Mesh(sideWallGeom, white_mat);
   rightWall.position.x = -roomx / 2;
-  rightWall.position.y += allHeight;
   scene.add(rightWall);
 
   let fsx = (roomx/2) * 0.87;//front side x
@@ -209,12 +204,10 @@ function createLayout(scene) {
   const frontSideLeft = new THREE.Mesh(frontSideGeom, white_mat);
   frontSideLeft.position.z = - roomz/2;
   frontSideLeft.position.x = - (roomx/2 - fsx/2);
-  frontSideLeft.position.y += allHeight;
   scene.add(frontSideLeft);
   const frontSideRight = new THREE.Mesh(frontSideGeom, white_mat);
   frontSideRight.position.z = -roomz/2;
   frontSideRight.position.x = (roomx/2 - fsx/2);
-  frontSideRight.position.y += allHeight;
   scene.add(frontSideRight);
   let doorHeight = roomy * 0.66;
   let doorWidth = (roomx - fsx*2) * 2;
@@ -222,13 +215,11 @@ function createLayout(scene) {
   const frontTop = new THREE.Mesh(frontTopGeom, white_mat);
   frontTop.position.z = -roomz/2;
   frontTop.position.y = doorHeight/2;
-  frontTop.position.y += allHeight;
   scene.add(frontTop);
   const doorGeom = new THREE.BoxGeometry(doorWidth, doorHeight, thickness*0.7);
   const door = new THREE.Mesh(doorGeom, darkerWhite_mat);
   door.position.z = -roomz/2;
   door.position.y = -((roomy-doorHeight)/2)
-  door.position.y += allHeight;
   scene.add(door);
   //DOOR KNOB
   //radiusTop radiusBottom height radialSegments
@@ -241,13 +232,11 @@ function createLayout(scene) {
   doorKnob.position.z = -2.43;
   doorKnob.position.y = -doorHeight * 0.25;
   doorKnob.position.x = doorWidth * 0.15;
-  doorKnob.position.y += allHeight;
   scene.add(doorKnob);
   //now add glass
   const glass_geom = new THREE.BoxGeometry(roomx, roomy, 0.04);
   const glass = new THREE.Mesh(glass_geom, glass_mat);
   glass.position.z = roomz/2;
-  glass.position.y += allHeight;
   scene.add(glass);
 
 }
