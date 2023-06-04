@@ -154,14 +154,17 @@ function createSkybox(scene) {
 
 
 function createLayout(scene) {
-  const white_mat = new THREE.MeshPhongMaterial({
+  const white_mat = new THREE.MeshStandardMaterial({
     color:0xffffff,
+    roughness: 0.45,
   })
   const darkerWhite_mat = new THREE.MeshPhongMaterial({
     color:0xf0f0f0
   })
-  const metal_mat = new THREE.MeshPhongMaterial({
-    color:0x8a8888
+  const metal_mat = new THREE.MeshStandardMaterial({
+    color:0x8a8888,
+    metalness: 1.0,
+    roughness: 0.6,
   })
   let roomx = 6.5;
   let roomz = 5;
@@ -210,9 +213,12 @@ function createLayout(scene) {
   const doorKnob_geom = new THREE.CylinderGeometry( 1,1, 10, 7 );
   doorKnob_geom.scale = 0.1;
   const doorKnob = new THREE.Mesh(doorKnob_geom, metal_mat);
-  let doorKnobScale = 0.1;
-  //doorKnob.scale = new THREE.Vector3(doorKnobScale,doorKnobScale,doorKnobScale);
-  doorKnob.scale.set(doorKnobScale,doorKnobScale,doorKnobScale)
+  let doorKnobScale = 0.016;
+  doorKnob.scale.set(doorKnobScale,doorKnobScale,doorKnobScale);
+  doorKnob.rotation.z = rad(90);
+  doorKnob.position.z = -2.43;
+  doorKnob.position.y = -doorHeight * 0.25;
+  doorKnob.position.x = doorWidth * 0.15;
   scene.add(doorKnob);
 }
 
