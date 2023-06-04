@@ -22,12 +22,13 @@ function main() {
   //setFullscreen();
   //window.addEventListener('resize', ()=>{setFullscreen()})
 
-  const fov = 75;
+  const fov = 50;
   const aspect = 2;  // the canvas default
   const near = 0.1;
   const far = 100;
   const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-  camera.position.z = 2;
+  camera.position.z = 3; //forward will be from - looking at +
+  camera.position.y = 0;
 
   const renderer = new THREE.WebGLRenderer({antialias: false, canvas});
   const composer = new EffectComposer( renderer );
@@ -47,23 +48,14 @@ function main() {
   createSkybox(scene);
   createLayout(scene);
 
+
+  addTestLighting(scene);
+
   renderer.render(scene, camera);
 
-  //camera.rotation.y += rad(30);
-  //let axis = new THREE.Vector3(1,0,0);
-  //let up = new THREE.Vector3(0,1,0);
-  //axis.applyAxisAngle(up, camera.rotation.y);
-  //camera.rotateOnAxis(axis, rad(10))
-  //console.log(axis)
-
-  //camera.rotation.y = rad(30);
-  //camera.rotation.z = rad(20)
-
-  
   function render(time) {
     //renderer.render(scene, camera);
     composer.render();
-    //moveCamera(camera);
     controls.update();
     requestAnimationFrame(render);
   }
@@ -78,6 +70,14 @@ function rad(deg) {
   return deg * (Math.PI/180);
 }
 
+function addTestLighting(scene) {
+  const ambient = new THREE.AmbientLight( 0x383838 );
+  scene.add(ambient);
+  const testLight = new THREE.PointLight( 0xededed );
+  //testLight.position.y = 1
+
+  scene.add(testLight);
+}
 
 function setFullscreen() {
   const canvas = document.querySelector('#c');
@@ -103,40 +103,6 @@ document.addEventListener('mousemove', function(ev) {
     }
   } 
 });
-function moveCamera(camera) {
-  if (!mouse.mousedown) return;
-  let horizontal = mouse.currentxy[0] - mouse.lastxy[0];
-  let vertical = mouse.currentxy[1] - mouse.lastxy[1];
-  if (horizontal == 0 && vertical == 0) return;
-  //IMPLEMENT CAMERA ROTATION HERE
-  
-  let sensitivity = 0.3;
-  //camera.rotation.y += rad(horizontal) * sensitivity;
-  //let savedy = camera.rotation.y;
-  //camera.rotation.y = 0;
-  //camera.rotation.x += rad(vertical) * sensitivity;
-  //camera.rotation.y = savedy + (rad(horizontal) * sensitivity);
-
-  //camera.rotateY(rad(horizontal) * sensitivity);
-  //camera.rotateX(rad(vertical) * sensitivity);
-  
-  //camera.rotation.y += rad(horizontal) * sensitivity;
-  //let axis = new THREE.Vector3(1,0,0);
-  //let up = new THREE.Vector3(0,1,0);
-  //axis.applyAxisAngle(up, camera.rotation.y);
-  //camera.rotateOnAxis(axis, rad(vertical) * sensitivity)
-  //console.log(axis)
-
-  //camera.rotation.y += rad(horizontal) * sensitivity;
-  let axis = new THREE.Vector3(1,0,0);
-  let up = new THREE.Vector3(0,1,0);
-  axis.applyAxisAngle(up, camera.rotation.y);
-  //camera.rotateOnAxis(axis, rad(vertical) * sensitivity)
-  console.log(axis)
-
-  mouse.lastxy = mouse.currentxy;
-}
-
 
 function createSkybox(scene) {
   //order: front,back, up,down, right,left
@@ -180,22 +146,48 @@ function createSkybox(scene) {
   matArray.push(front); //done
   matArray.push(back); //done
 
-  let skyboxSize = 10;
+  let skyboxSize = 50;
   const sky_geom = new THREE.BoxGeometry(skyboxSize,skyboxSize,skyboxSize);
   const skybox = new THREE.Mesh(sky_geom, matArray);
+  skybox.rotation.y = rad(90)
   scene.add(skybox);
 }
 
 
 function createLayout(scene) {
-  const floor_geom = new THREE.BoxGeometry(1,0.1,1);
-  const white_mat = new THREE.MeshBasicMaterial({
+  const white_mat = new THREE.MeshPhongMaterial({
     color:0xffffff,
-    //map: loader.load("resources/red.png")
   }) 
+  let roomx = 6.5;
+  let roomz = 5;
+  let roomy = 2;
+  let thickness = 0.1;
+  const floor_geom = new THREE.BoxGeometry(roomx,thickness,roomz);
   const floor = new THREE.Mesh(floor_geom, white_mat);
-  floor.position.y = -0.5;
+  floor.position.y = -roomy / 2;
   scene.add(floor);
+  const roof = new THREE.Mesh(floor_geom, white_mat);
+  roof.position.y = roomy / 2;
+  scene.add(roof);
+
+  const sideWallGeom = new THREE.BoxGeometry(thickness,roomy,roomz);
+  const leftWall = new THREE.Mesh(sideWallGeom, white_mat);
+  leftWall.position.x = roomx / 2;
+  scene.add(leftWall);
+  const rightWall = new THREE.Mesh(sideWallGeom, white_mat);
+  rightWall.position.x = -roomx / 2;
+  scene.add(rightWall);
+
+  let fsx = (roomx/2) * 0.85;//front side x
+  const frontSideGeom = new THREE.BoxGeometry(fsx,roomy,thickness);
+  const frontSideLeft = new THREE.Mesh(frontSideGeom, white_mat);
+  frontSideLeft.position.z = - roomz/2;
+  frontSideLeft.position.x = - (roomx/2 - fsx/2);
+  scene.add(frontSideLeft);
+  const frontSideRight = new THREE.Mesh(frontSideGeom, white_mat);
+  frontSideRight.position.z = -roomz/2;
+  frontSideRight.position.x = (roomx/2 - fsx/2);
+  scene.add(frontSideRight);
 }
 
 
