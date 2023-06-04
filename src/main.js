@@ -171,9 +171,9 @@ function createLayout(scene) {
   })
   const glass_mat = new THREE.MeshStandardMaterial({
     color: 0x617987,
-    roughness: 0.5,
+    roughness: 0.2,
     transparent: true,
-    opacity: 0.1,
+    opacity: 0.13,
   })
   const blackLining_mat = new THREE.MeshStandardMaterial({
     color: 0x0a0a0a,
@@ -234,11 +234,48 @@ function createLayout(scene) {
   doorKnob.position.x = doorWidth * 0.15;
   scene.add(doorKnob);
   //now add glass
+  let glassThickness = 0.04
   const glass_geom = new THREE.BoxGeometry(roomx, roomy, 0.04);
   const glass = new THREE.Mesh(glass_geom, glass_mat);
   glass.position.z = roomz/2;
   scene.add(glass);
-
+  //now add black window struts
+  let strutThickness = glassThickness * 1.1;
+  let strutWidth = roomy * 0.01;
+  let strutInwardOffset = 0.03;
+  //horizontal struts
+  const horizontalLining_geom = new THREE.BoxGeometry(roomx-thickness, strutWidth, strutThickness);
+  const horizontalLiningBottom = new THREE.Mesh(horizontalLining_geom, blackLining_mat);
+  horizontalLiningBottom.position.y = - (roomy/2) + strutWidth;
+  horizontalLiningBottom.position.z = roomz/2;
+  horizontalLiningBottom.position.y += strutInwardOffset;
+  scene.add(horizontalLiningBottom);
+  const horizontalLiningTop = new THREE.Mesh(horizontalLining_geom, blackLining_mat);
+  horizontalLiningTop.position.y = (roomy/2) - strutWidth;
+  horizontalLiningTop.position.z = roomz/2;
+  horizontalLiningTop.position.y -= strutInwardOffset;
+  scene.add(horizontalLiningTop);
+  //vertical struts
+  //counting from sides:  L1 L2 R2 R1
+  const verticalStrut_geom = new THREE.BoxGeometry(strutWidth, roomy-thickness, strutThickness);
+  const verticalStrutL1 = new THREE.Mesh(verticalStrut_geom, blackLining_mat);
+  verticalStrutL1.position.x = roomx/2 - strutWidth;
+  verticalStrutL1.position.z = roomz/2;
+  verticalStrutL1.position.x -= strutInwardOffset;
+  scene.add(verticalStrutL1);
+  const verticalStrutR1 = new THREE.Mesh(verticalStrut_geom, blackLining_mat);
+  verticalStrutR1.position.x = -roomx/2 + strutWidth;
+  verticalStrutR1.position.z = roomz/2;
+  verticalStrutR1.position.x += strutInwardOffset;
+  scene.add(verticalStrutR1);
+  const verticalStrutL2 = new THREE.Mesh(verticalStrut_geom, blackLining_mat);
+  verticalStrutL2.position.x = (roomx/3) /2;
+  verticalStrutL2.position.z = roomz/2;
+  scene.add(verticalStrutL2);
+  const verticalStrutR2 = new THREE.Mesh(verticalStrut_geom, blackLining_mat);
+  verticalStrutR2.position.x = -(roomx/3) /2;
+  verticalStrutR2.position.z = roomz/2;
+  scene.add(verticalStrutR2);
 }
 
 
