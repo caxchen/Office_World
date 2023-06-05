@@ -49,7 +49,7 @@ const metal_mat = new THREE.MeshStandardMaterial({
     color:0xa1a1a1,
     //metalness: 0.3,
     roughness: 0,
-    side: THREE.DoubleSide,
+    //side: THREE.DoubleSide,
 })
 
 export class TestPrefab extends Prefab {
@@ -225,7 +225,7 @@ export class Chair extends Prefab {
         this.shapes.push(backCushion);
         //NOW THE METAL STRUTS
         let strutWidth = thickness;
-        let strutHeight = thickness * -0.8;
+        let strutHeight = thickness * 0.5;
         //strut Back Z-aligned
         const strutBZ_geom = new THREE.BoxGeometry(strutWidth, strutHeight, backZ+thickness);
         const strutBZ = new THREE.Mesh(strutBZ_geom, metal_mat);
@@ -233,19 +233,50 @@ export class Chair extends Prefab {
         strutBZ.position.z = strutBZ_Z;
         strutBZ.position.y = -thickness;
         this.shapes.push(strutBZ);
-        //strut back connector
-        /*const backConnector_geom = getJoint(strutWidth*13);
-        const backConnector = new THREE.Mesh(backConnector_geom, metal_mat);
-        backConnector.position.z = strutBZ_Z*2 + 0.02;
-        backConnector.position.y = strutHeight*0.8 + 0.005;
-        backConnector.rotation.z = rad(270);
-        let scale = 1.05;
-        backConnector.scale.set(scale,scale,scale);
-        this.shapes.push(backConnector);*/
         const strutBY_geom = new THREE.BoxGeometry(strutWidth, cushionWidth*1.4, strutHeight);
         const strutBY = new THREE.Mesh(strutBY_geom, metal_mat);
         strutBY.position.z = (strutBZ_Z*2) + (thickness/2) - 0.01;
-        strutBY.position.y = cushionWidth*0.42;
+        strutBY.position.y = cushionWidth*0.45;
         this.shapes.push(strutBY);
+        //Now bottom pole
+        const bottomPole_geom = new THREE.CylinderGeometry(strutWidth*0.4, strutWidth*0.4, cushionWidth, 8, 1, false);
+        const bottomPole = new THREE.Mesh(bottomPole_geom, metal_mat);
+        bottomPole.position.y = -cushionWidth * 0.6;
+        this.shapes.push(bottomPole);
+        //Now bottom cross struts
+        const bottomStrut_geom = new THREE.BoxGeometry(strutWidth*0.6, strutHeight, cushionWidth*1.3);
+        const bottomStrutZ = new THREE.Mesh(bottomStrut_geom, metal_mat);
+        bottomStrutZ.position.y = -cushionWidth * 1.2;
+        this.shapes.push(bottomStrutZ);
+        const bottomStrutX = new THREE.Mesh(bottomStrut_geom, metal_mat);
+        bottomStrutX.rotation.y = rad(90);
+        bottomStrutX.position.y = bottomStrutZ.position.y;
+        this.shapes.push(bottomStrutX);
+        //now the four wheels
+        let wheelRadius = 0.044;
+        const wheelGeom = new THREE.SphereGeometry(wheelRadius);
+        let wheelY = bottomStrutZ.position.y - wheelRadius*1.3;
+        let wheelSideOffset = ((cushionWidth*1.3) /2) - wheelRadius;
+        //front
+        const wheelFront = new THREE.Mesh(wheelGeom, blackFabric_mat);
+        wheelFront.position.y = wheelY;
+        wheelFront.position.z = -wheelSideOffset;
+        this.shapes.push(wheelFront);
+        //back
+        const wheelBack = new THREE.Mesh(wheelGeom, blackFabric_mat);
+        wheelBack.position.y = wheelY;
+        wheelBack.position.z = wheelSideOffset;
+        this.shapes.push(wheelBack);
+        //left
+        const wheelLeft = new THREE.Mesh(wheelGeom, blackFabric_mat);
+        wheelLeft.position.y = wheelY;
+        wheelLeft.position.x = -wheelSideOffset;
+        this.shapes.push(wheelLeft);
+        //right
+        const wheelRight = new THREE.Mesh(wheelGeom, blackFabric_mat);
+        wheelRight.position.y = wheelY;
+        wheelRight.position.x = wheelSideOffset;
+        this.shapes.push(wheelRight);
+
     }
 }
