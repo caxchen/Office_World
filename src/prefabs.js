@@ -23,6 +23,28 @@ class Prefab {
             this.shapes[i].position.z += z;
         }
     }
+
+    rotateY(rad) {
+        let yAxis = new THREE.Vector3(0,1,0);
+        let point = new THREE.Vector3(0,0,0);
+        for (let i=0; i<this.shapes.length; i++) {
+            /*let x = this.shapes[i].position.x;
+            let y = this.shapes[i].position.y;
+            let z = this.shapes[i].position.z;
+            this.shapes[i].position.x = 0;
+            this.shapes[i].position.y = 0;
+            this.shapes[i].position.z = 0;
+            this.shapes[i].rotateOnWorldAxis(yAxis, rad);
+            this.shapes[i].position.x = x;
+            this.shapes[i].position.y = y;
+            this.shapes[i].position.z = z;*/
+
+            this.shapes[i].position.sub(point); // remove the offset
+            this.shapes[i].position.applyAxisAngle(yAxis, rad); // rotate the POSITION
+            this.shapes[i].rotateOnWorldAxis(yAxis, rad);
+            this.shapes[i].position.add(point); // re-add the offset
+        }
+    }
 }
 
 const white_mat = new THREE.MeshPhysicalMaterial({
@@ -177,7 +199,13 @@ export class Desk extends Prefab {
         xPanelRB.position.y = deskHeight/2;
         xPanelRB.position.x = bottomPanelX;
         this.shapes.push(xPanelRB);
-        
-        
+    }
+
+}
+
+export class ExectutiveChair extends Prefab {
+    constructor(scene) {
+        super(scene);
+
     }
 }

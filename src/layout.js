@@ -86,7 +86,7 @@ export function createLayout(scene) {
   let doorKnobScale = 0.016;
   doorKnob.scale.set(doorKnobScale,doorKnobScale,doorKnobScale);
   doorKnob.rotation.z = rad(90);
-  doorKnob.position.z = -2.43;
+  doorKnob.position.z = -roomz*0.5 + thickness*0.8;
   doorKnob.position.y = -doorHeight * 0.25;
   doorKnob.position.x = doorWidth * 0.15;
   scene.add(doorKnob);
@@ -142,6 +142,13 @@ export function addFurniture(scene) {
     //testPrefab.translate(0,0,0);
     //testPrefab.addToScene(scene);
     let desk = new Prefabs.Desk(scene);
-    desk.translate(0, -0.3, 1)
+    desk.translate(0, -0.88, 1.25);
+    //desk.rotateY(rad(20))
+    requestAnimationFrame(()=>{testAnimate(desk)});
     desk.addToScene(scene);
+}
+
+function testAnimate(prefab) {
+    prefab.rotateY(rad(0.1));
+    requestAnimationFrame(()=>{testAnimate(prefab)});
 }
