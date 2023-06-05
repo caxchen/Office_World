@@ -30,7 +30,7 @@ function main() {
   const near = 0.1;
   const far = 100;
   const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-  camera.position.z = -2; //forward will be from - looking at +
+  camera.position.z = -1.5; //forward will be from - looking at +
   camera.position.y = 2;
 
   const renderer = new THREE.WebGLRenderer({antialias: true, canvas});

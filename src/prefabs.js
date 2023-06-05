@@ -1,5 +1,8 @@
-
 import * as THREE from 'three';
+
+function rad(deg) {
+    return deg * (Math.PI/180);
+}
 
 class Prefab {
     constructor(scene) {
@@ -43,13 +46,74 @@ export class TestPrefab extends Prefab {
     }
 }
 
+function getJoint(heightIn=13) {
+    //radiusTop, radiusBottom, height, radialSegments, heightSegments, openEnded, thetaStart, thetaLength;
+    let scale = 0.075;
+    let rTop = 1*scale;
+    let rBottom = rTop;
+    let height = heightIn*scale;
+    let rSegments = 10;
+    let hSegments = 1;
+    let openEnded = false;
+    let tStart = 0;
+    let tLength = rad(90);
+    return new THREE.CylinderGeometry(rTop, rBottom, height, rSegments, hSegments, openEnded, tStart, tLength);
+}
 
+//left and right is from Heron's perspective
 export class Desk extends Prefab {
     constructor(scene) {
         super(scene);
-        //radiusTop, radiusBottom, height, radialSegments
-        const joint_geom = new THREE.CylinderGeometry( 1, 1, 2, );
+        let deskWidth = 2.5;
+        let deskHeight = 0.8;
+        let deskLength = 0.9;
+        let shelfWidth = deskWidth/4;
+        //  L1-----------R1
+        //  |   |    |   |
+        //  L2--l3   R3  R2
+        // 1 Joints
+        const joint_geom = getJoint(deskLength*13);
         const jointL1 = new THREE.Mesh(joint_geom, white_mat);
+        jointL1.rotateZ(rad(180));
+        jointL1.rotateX(rad(90));
+        jointL1.position.x = -deskWidth/2;
+        jointL1.position.y = deskHeight;
         this.shapes.push(jointL1);
+        const jointR1 = new THREE.Mesh(joint_geom, white_mat);
+        jointR1.rotateZ(rad(90));
+        jointR1.rotateX(rad(90));
+        jointR1.position.x = deskWidth/2;
+        jointR1.position.y = deskHeight;
+        this.shapes.push(jointR1);
+        //2 Joints
+        const jointL2 = new THREE.Mesh(joint_geom, white_mat);
+        jointL2.rotateZ(rad(270));
+        jointL2.rotateX(rad(90));
+        jointL2.position.x = -deskWidth/2;
+        this.shapes.push(jointL2);
+        const jointR2 = new THREE.Mesh(joint_geom, white_mat);
+        //jointR2.rotateZ(rad(90))
+        jointR2.rotateX(rad(90));
+        jointR2.position.x = deskWidth/2;
+        this.shapes.push(jointR2);
+        //3 Joints
+        const jointL3 = new THREE.Mesh(joint_geom, white_mat);
+        //jointL3.rotateZ(rad(0))
+        jointL3.rotateX(rad(90));
+        jointL3.position.x = -(deskWidth-(2*shelfWidth))/2;
+        this.shapes.push(jointL3);
+        const jointR3 = new THREE.Mesh(joint_geom, white_mat);
+        jointR3.rotateZ(rad(270))
+        jointR3.rotateX(rad(90));
+        jointR3.position.x = (deskWidth-(2*shelfWidth))/2;
+        this.shapes.push(jointR3);
+
+        //NOW ADD THE FLAT PIECES
+        let thickness = 0.075;
+        const top_geom = new THREE.BoxGeometry(deskWidth*1.01, thickness, deskLength*0.975);
+        const top = new THREE.Mesh(top_geom, white_mat);
+        top.position.y = deskHeight + thickness/2;
+        this.shapes.push(top);
+        
     }
 }

@@ -36,8 +36,8 @@ export function createLayout(scene) {
     color: 0x0a0a0a,
     roughness: 0.8,
   })
-  let roomx = 5.75;
-  let roomz = 5;
+  let roomx = 6.5;
+  let roomz = 6;
   let roomy = 2;
   let thickness = 0.1;
   const floor_geom = new THREE.BoxGeometry(roomx,thickness,roomz);
@@ -142,5 +142,6 @@ export function addFurniture(scene) {
     //testPrefab.translate(0,0,0);
     //testPrefab.addToScene(scene);
     let desk = new Prefabs.Desk(scene);
+    desk.translate(0, -0.3, 1)
     desk.addToScene(scene);
 }
