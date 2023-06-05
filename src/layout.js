@@ -137,17 +137,15 @@ export function createLayout(scene) {
 
 
 export function addFurniture(scene) {
-    //let testPrefab = new 
-    //let testPrefab = new Prefabs.TestPrefab(scene);
-    //testPrefab.translate(0,0,0);
-    //testPrefab.addToScene(scene);
     let desk = new Prefabs.Desk(scene);
     desk.translate(0, -0.88, 1.25);
     //desk.rotateY(rad(20))
-    requestAnimationFrame(()=>{testAnimate(desk)});
     desk.addToScene(scene);
+    let executiveChair = new Prefabs.Chair(scene);
+    executiveChair.addToScene(scene);
 }
 
+    //requestAnimationFrame(()=>{testAnimate(desk)});
 function testAnimate(prefab) {
     prefab.rotateY(rad(0.1));
     requestAnimationFrame(()=>{testAnimate(prefab)});

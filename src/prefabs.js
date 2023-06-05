@@ -24,21 +24,10 @@ class Prefab {
         }
     }
 
-    rotateY(rad) {
+    rotateY(rad, pointCoords=[0,0,0]) {
         let yAxis = new THREE.Vector3(0,1,0);
-        let point = new THREE.Vector3(0,0,0);
+        let point = new THREE.Vector3(pointCoords[0],pointCoords[1],pointCoords[2]);
         for (let i=0; i<this.shapes.length; i++) {
-            /*let x = this.shapes[i].position.x;
-            let y = this.shapes[i].position.y;
-            let z = this.shapes[i].position.z;
-            this.shapes[i].position.x = 0;
-            this.shapes[i].position.y = 0;
-            this.shapes[i].position.z = 0;
-            this.shapes[i].rotateOnWorldAxis(yAxis, rad);
-            this.shapes[i].position.x = x;
-            this.shapes[i].position.y = y;
-            this.shapes[i].position.z = z;*/
-
             this.shapes[i].position.sub(point); // remove the offset
             this.shapes[i].position.applyAxisAngle(yAxis, rad); // rotate the POSITION
             this.shapes[i].rotateOnWorldAxis(yAxis, rad);
@@ -50,7 +39,18 @@ class Prefab {
 const white_mat = new THREE.MeshPhysicalMaterial({
     color:0xffffff,
     clearcoat: 0.5,
-  })
+})
+const blackFabric_mat = new THREE.MeshPhysicalMaterial({
+    color:0x323233,
+    sheen: 1,
+    //sheenRoughness:0.1
+})
+const metal_mat = new THREE.MeshStandardMaterial({
+    color:0xa1a1a1,
+    //metalness: 0.3,
+    roughness: 0,
+    side: THREE.DoubleSide,
+})
 
 export class TestPrefab extends Prefab {
     constructor(scene) {
@@ -203,9 +203,49 @@ export class Desk extends Prefab {
 
 }
 
-export class ExectutiveChair extends Prefab {
+export class Chair extends Prefab {
     constructor(scene) {
         super(scene);
 
+        //seat cushion
+        let cushionWidth = 0.5;
+        let cushionLength = cushionWidth;
+        let thickness = cushionWidth*0.2;
+        const seatCushion_geom = new THREE.BoxGeometry(cushionWidth, thickness, cushionLength);
+        const seatCushion = new THREE.Mesh(seatCushion_geom, blackFabric_mat);
+        this.shapes.push(seatCushion);
+        //back cushion
+        let backWidth = cushionWidth * 0.9;
+        let backHeight = cushionWidth * 0.5;
+        const backCushion_geom = new THREE.BoxGeometry(backWidth, backHeight, thickness)
+        const backCushion = new THREE.Mesh(backCushion_geom, blackFabric_mat);
+        let backZ = cushionWidth * 0.7;
+        backCushion.position.z = backZ;
+        backCushion.position.y = cushionWidth;
+        this.shapes.push(backCushion);
+        //NOW THE METAL STRUTS
+        let strutWidth = thickness;
+        let strutHeight = thickness * -0.8;
+        //strut Back Z-aligned
+        const strutBZ_geom = new THREE.BoxGeometry(strutWidth, strutHeight, backZ+thickness);
+        const strutBZ = new THREE.Mesh(strutBZ_geom, metal_mat);
+        let strutBZ_Z = (cushionLength/2) - thickness/2;
+        strutBZ.position.z = strutBZ_Z;
+        strutBZ.position.y = -thickness;
+        this.shapes.push(strutBZ);
+        //strut back connector
+        /*const backConnector_geom = getJoint(strutWidth*13);
+        const backConnector = new THREE.Mesh(backConnector_geom, metal_mat);
+        backConnector.position.z = strutBZ_Z*2 + 0.02;
+        backConnector.position.y = strutHeight*0.8 + 0.005;
+        backConnector.rotation.z = rad(270);
+        let scale = 1.05;
+        backConnector.scale.set(scale,scale,scale);
+        this.shapes.push(backConnector);*/
+        const strutBY_geom = new THREE.BoxGeometry(strutWidth, cushionWidth*1.4, strutHeight);
+        const strutBY = new THREE.Mesh(strutBY_geom, metal_mat);
+        strutBY.position.z = (strutBZ_Z*2) + (thickness/2) - 0.01;
+        strutBY.position.y = cushionWidth*0.42;
+        this.shapes.push(strutBY);
     }
 }
