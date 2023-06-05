@@ -113,6 +113,8 @@ export class Desk extends Prefab {
         let thickness = 0.075;
         //First, z axis aligned panels.
         //top panel
+        let adjustedDeskWidth = deskWidth*1.01;
+        let adjustedDeskLength = deskLength*0.975;
         const top_geom = new THREE.BoxGeometry(deskWidth*1.01, thickness, deskLength*0.975);
         const top = new THREE.Mesh(top_geom, white_mat);
         top.position.y = deskHeight + thickness/2;
@@ -129,7 +131,7 @@ export class Desk extends Prefab {
         this.shapes.push(sidePanelR);
         //bottom panels
         let bottomPanelX = (betweenShelves/2) + (shelfWidth/2)
-        const bottomPanel_geom = new THREE.BoxGeometry(shelfWidth, thickness, deskLength);
+        const bottomPanel_geom = new THREE.BoxGeometry(shelfWidth, thickness, adjustedDeskLength);
         const bottomPanelL = new THREE.Mesh(bottomPanel_geom, white_mat);
         //bottomPanelL
         bottomPanelL.position.x = -bottomPanelX;
@@ -140,6 +142,16 @@ export class Desk extends Prefab {
         bottomPanelR.position.x = bottomPanelX;
         bottomPanelR.position.y = -thickness/2;
         this.shapes.push(bottomPanelR);
+        //inner panels
+        const innerPanelL = new THREE.Mesh(side_geom, white_mat);
+        innerPanelL.position.x = -((betweenShelves/2) - (thickness/2));
+        innerPanelL.position.y = deskHeight/2;
+        this.shapes.push(innerPanelL);
+        const innerPanelR = new THREE.Mesh(side_geom, white_mat);
+        innerPanelR.position.x = ((betweenShelves/2) - (thickness/2));
+        innerPanelR.position.y = deskHeight/2;
+        this.shapes.push(innerPanelR);
+        
         
     }
 }
