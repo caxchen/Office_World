@@ -97,23 +97,49 @@ export class Desk extends Prefab {
         jointR2.position.x = deskWidth/2;
         this.shapes.push(jointR2);
         //3 Joints
+        let betweenShelves = (deskWidth-(2*shelfWidth));
         const jointL3 = new THREE.Mesh(joint_geom, white_mat);
         //jointL3.rotateZ(rad(0))
         jointL3.rotateX(rad(90));
-        jointL3.position.x = -(deskWidth-(2*shelfWidth))/2;
+        jointL3.position.x = -betweenShelves/2;
         this.shapes.push(jointL3);
         const jointR3 = new THREE.Mesh(joint_geom, white_mat);
         jointR3.rotateZ(rad(270))
         jointR3.rotateX(rad(90));
-        jointR3.position.x = (deskWidth-(2*shelfWidth))/2;
+        jointR3.position.x = betweenShelves/2;
         this.shapes.push(jointR3);
 
         //NOW ADD THE FLAT PIECES
         let thickness = 0.075;
+        //First, z axis aligned panels.
+        //top panel
         const top_geom = new THREE.BoxGeometry(deskWidth*1.01, thickness, deskLength*0.975);
         const top = new THREE.Mesh(top_geom, white_mat);
         top.position.y = deskHeight + thickness/2;
         this.shapes.push(top);
+        const side_geom = new THREE.BoxGeometry(thickness, deskHeight*1.01, deskLength*0.975);
+        //side panels
+        const sidePanelL = new THREE.Mesh(side_geom, white_mat);
+        sidePanelL.position.x = -((deskWidth/2) + thickness/2);
+        sidePanelL.position.y = deskHeight/2;
+        this.shapes.push(sidePanelL);
+        const sidePanelR = new THREE.Mesh(side_geom, white_mat);
+        sidePanelR.position.x = ((deskWidth/2) + thickness/2);
+        sidePanelR.position.y = deskHeight/2;
+        this.shapes.push(sidePanelR);
+        //bottom panels
+        let bottomPanelX = (betweenShelves/2) + (shelfWidth/2)
+        const bottomPanel_geom = new THREE.BoxGeometry(shelfWidth, thickness, deskLength);
+        const bottomPanelL = new THREE.Mesh(bottomPanel_geom, white_mat);
+        //bottomPanelL
+        bottomPanelL.position.x = -bottomPanelX;
+        bottomPanelL.position.y = -thickness/2;
+        this.shapes.push(bottomPanelL);
+        const bottomPanelR = new THREE.Mesh(bottomPanel_geom, white_mat);
+        //bottomPanelL
+        bottomPanelR.position.x = bottomPanelX;
+        bottomPanelR.position.y = -thickness/2;
+        this.shapes.push(bottomPanelR);
         
     }
 }
