@@ -5,8 +5,9 @@ function rad(deg) {
 }
 
 class Prefab {
-    constructor(scene) {
+    constructor(scene, scale=1) {
         this.shapes = [];
+        this.scale = scale;
         //add shapes here
     }
 
@@ -32,6 +33,12 @@ class Prefab {
             this.shapes[i].position.applyAxisAngle(yAxis, rad); // rotate the POSITION
             this.shapes[i].rotateOnWorldAxis(yAxis, rad);
             this.shapes[i].position.add(point); // re-add the offset
+        }
+    }
+
+    setScale(scale) {
+        for (let i=0; i<this.shapes.length; i++) {
+            this.shapes[i].scale.set(scale,scale,scale);
         }
     }
 }
@@ -84,11 +91,11 @@ function getJoint(heightIn=13) {
 
 //left and right is from Heron's perspective
 export class Desk extends Prefab {
-    constructor(scene) {
+    constructor(scene, scale=1) {
         super(scene);
-        let deskWidth = 2.5;
-        let deskHeight = 0.8;
-        let deskLength = 0.9;
+        let deskWidth = 2.5 * scale;
+        let deskHeight = 0.8 * scale;
+        let deskLength = 0.9 * scale;
         let shelfWidth = deskWidth/4;
         //  L1-----------R1
         //  |   |    |   |
@@ -204,11 +211,11 @@ export class Desk extends Prefab {
 }
 
 export class Chair extends Prefab {
-    constructor(scene) {
-        super(scene);
+    constructor(scene, scale=1) {
+        super(scene, scale);
 
         //seat cushion
-        let cushionWidth = 0.5;
+        let cushionWidth = 0.5 * scale;
         let cushionLength = cushionWidth;
         let thickness = cushionWidth*0.2;
         const seatCushion_geom = new THREE.BoxGeometry(cushionWidth, thickness, cushionLength);
@@ -235,7 +242,7 @@ export class Chair extends Prefab {
         this.shapes.push(strutBZ);
         const strutBY_geom = new THREE.BoxGeometry(strutWidth, cushionWidth*1.4, strutHeight);
         const strutBY = new THREE.Mesh(strutBY_geom, metal_mat);
-        strutBY.position.z = (strutBZ_Z*2) + (thickness/2) - 0.01;
+        strutBY.position.z = (strutBZ_Z*2) + (thickness/2) * 0.99;
         strutBY.position.y = cushionWidth*0.45;
         this.shapes.push(strutBY);
         //Now bottom pole
@@ -253,7 +260,7 @@ export class Chair extends Prefab {
         bottomStrutX.position.y = bottomStrutZ.position.y;
         this.shapes.push(bottomStrutX);
         //now the four wheels
-        let wheelRadius = 0.044;
+        let wheelRadius = 0.044 * scale;
         const wheelGeom = new THREE.SphereGeometry(wheelRadius);
         let wheelY = bottomStrutZ.position.y - wheelRadius*1.3;
         let wheelSideOffset = ((cushionWidth*1.3) /2) - wheelRadius;
@@ -282,9 +289,9 @@ export class Chair extends Prefab {
 }
 
 export class ExecutiveChair extends Chair {
-    constructor(scene) {
-        super(scene);
-        let cushionWidth = 0.5;
+    constructor(scene, scale=1) {
+        super(scene, scale);
+        let cushionWidth = 0.5 * scale;
         let cushionLength = cushionWidth;
         let thickness = cushionWidth*0.2;
         let strutWidth = thickness;

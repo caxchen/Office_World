@@ -137,11 +137,13 @@ export function createLayout(scene) {
 
 
 export function addFurniture(scene) {
-    let desk = new Prefabs.Desk(scene);
+    let desk = new Prefabs.Desk(scene, 0.5);
     desk.translate(0, -0.88, 1.25);
     //desk.rotateY(rad(20))
     desk.addToScene(scene);
-    let executiveChair = new Prefabs.ExecutiveChair(scene);
+    let executiveChair = new Prefabs.ExecutiveChair(scene, 0.8);
+    //executiveChair.translate(0, -0.25, 2.4);
+    //executiveChair.setScale(0.8)
     executiveChair.addToScene(scene);
 }
 
