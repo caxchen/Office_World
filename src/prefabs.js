@@ -115,11 +115,11 @@ export class Desk extends Prefab {
         //top panel
         let adjustedDeskWidth = deskWidth*1.01;
         let adjustedDeskLength = deskLength*0.975;
-        const top_geom = new THREE.BoxGeometry(deskWidth*1.01, thickness, deskLength*0.975);
+        const top_geom = new THREE.BoxGeometry(adjustedDeskWidth, thickness, adjustedDeskLength);
         const top = new THREE.Mesh(top_geom, white_mat);
         top.position.y = deskHeight + thickness/2;
         this.shapes.push(top);
-        const side_geom = new THREE.BoxGeometry(thickness, deskHeight*1.01, deskLength*0.975);
+        const side_geom = new THREE.BoxGeometry(thickness, deskHeight, adjustedDeskLength);
         //side panels
         const sidePanelL = new THREE.Mesh(side_geom, white_mat);
         sidePanelL.position.x = -((deskWidth/2) + thickness/2);
@@ -151,6 +151,32 @@ export class Desk extends Prefab {
         innerPanelR.position.x = ((betweenShelves/2) - (thickness/2));
         innerPanelR.position.y = deskHeight/2;
         this.shapes.push(innerPanelR);
+        //Next x axis aligned panels LR: Left Right. FB: Front Back
+        const xPanel_geom = new THREE.BoxGeometry(shelfWidth, deskHeight, thickness);
+        //Left Front
+        const xPanelLF = new THREE.Mesh(xPanel_geom, white_mat);
+        xPanelLF.position.z = -(deskLength/2 - thickness*0.65);
+        xPanelLF.position.y = deskHeight/2;
+        xPanelLF.position.x = -bottomPanelX;
+        this.shapes.push(xPanelLF);
+        //Right Front
+        const xPanelRF = new THREE.Mesh(xPanel_geom, white_mat);
+        xPanelRF.position.z = -(deskLength/2 - thickness*0.65);
+        xPanelRF.position.y = deskHeight/2;
+        xPanelRF.position.x = bottomPanelX;
+        this.shapes.push(xPanelRF);
+        //Left Back
+        const xPanelLB = new THREE.Mesh(xPanel_geom, white_mat);
+        xPanelLB.position.z = (deskLength/2 - thickness*0.65);
+        xPanelLB.position.y = deskHeight/2;
+        xPanelLB.position.x = -bottomPanelX;
+        this.shapes.push(xPanelLB);
+        //Right Back
+        const xPanelRB = new THREE.Mesh(xPanel_geom, white_mat);
+        xPanelRB.position.z = (deskLength/2 - thickness*0.65);
+        xPanelRB.position.y = deskHeight/2;
+        xPanelRB.position.x = bottomPanelX;
+        this.shapes.push(xPanelRB);
         
         
     }
