@@ -52,11 +52,22 @@ const blackFabric_mat = new THREE.MeshPhysicalMaterial({
     sheen: 1,
     //sheenRoughness:0.1
 })
+const blackScreen_mat = new THREE.MeshPhysicalMaterial({
+    color:0x323233,
+    clearcoat: 0.3,
+    roughness:0.5,
+})
 const metal_mat = new THREE.MeshStandardMaterial({
     color:0xa1a1a1,
     //metalness: 0.3,
     roughness: 0,
     //side: THREE.DoubleSide,
+})
+const hologram_mat = new THREE.MeshBasicMaterial({
+    color:0x70f5ff,
+    transparent:true,
+    opacity:0.8,
+    side: THREE.DoubleSide,
 })
 
 export class TestPrefab extends Prefab {
@@ -148,8 +159,22 @@ export class Desk extends Prefab {
         const top = new THREE.Mesh(top_geom, white_mat);
         top.position.y = deskHeight + thickness/2;
         this.shapes.push(top);
-        const side_geom = new THREE.BoxGeometry(thickness, deskHeight, adjustedDeskLength);
+        //Now add black screen interface
+        let interfaceThickness = thickness*0.4;
+        const interface_geom = new THREE.BoxGeometry(adjustedDeskWidth*0.8, interfaceThickness, adjustedDeskLength*0.9);
+        const deskScreen = new THREE.Mesh(interface_geom, blackScreen_mat);
+        deskScreen.position.y = top.position.y+interfaceThickness;
+        this.shapes.push(deskScreen);
+        //Now add holographic screen
+        let screenDeg = 60
+        let screenRadius = deskLength*1.5
+        const screen_geom = new THREE.CylinderGeometry(screenRadius, screenRadius, deskLength*0.7, 10, 1, true, rad(180 - screenDeg*0.5), rad(screenDeg));
+        const screen = new THREE.Mesh(screen_geom, hologram_mat);
+        screen.position.y = top.position.y * 1.7;
+        screen.position.z = screenRadius*0.64;
+        this.shapes.push(screen);
         //side panels
+        const side_geom = new THREE.BoxGeometry(thickness, deskHeight, adjustedDeskLength);
         const sidePanelL = new THREE.Mesh(side_geom, white_mat);
         sidePanelL.position.x = -((deskWidth/2) + thickness/2);
         sidePanelL.position.y = deskHeight/2;

@@ -78,7 +78,7 @@ function addTestLighting(scene) {
   const ambient = new THREE.AmbientLight( 0x383838 );
   scene.add(ambient);
   const testLight = new THREE.PointLight( 0xededed );
-  testLight.position.y = 1
+  testLight.position.y = 0.7
 
   scene.add(testLight);
 }

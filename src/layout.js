@@ -46,7 +46,7 @@ export function createLayout(scene) {
   scene.add(floor);
   const roof = new THREE.Mesh(floor_geom, white_mat);
   roof.position.y = roomy / 2;
-  //scene.add(roof);
+  scene.add(roof);
 
   const sideWallGeom = new THREE.BoxGeometry(thickness,roomy,roomz);
   const leftWall = new THREE.Mesh(sideWallGeom, white_mat);
@@ -137,13 +137,12 @@ export function createLayout(scene) {
 
 
 export function addFurniture(scene) {
-    let desk = new Prefabs.Desk(scene, 0.5);
+    let desk = new Prefabs.Desk(scene, 0.8);
     desk.translate(0, -0.88, 1.25);
     //desk.rotateY(rad(20))
     desk.addToScene(scene);
-    let executiveChair = new Prefabs.ExecutiveChair(scene, 0.8);
-    //executiveChair.translate(0, -0.25, 2.4);
-    //executiveChair.setScale(0.8)
+    let executiveChair = new Prefabs.ExecutiveChair(scene, 0.75);
+    executiveChair.translate(0, -0.41, 2.1);
     executiveChair.addToScene(scene);
 }
 
