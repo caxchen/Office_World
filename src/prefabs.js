@@ -280,3 +280,45 @@ export class Chair extends Prefab {
 
     }
 }
+
+export class ExecutiveChair extends Chair {
+    constructor(scene) {
+        super(scene);
+        let cushionWidth = 0.5;
+        let cushionLength = cushionWidth;
+        let thickness = cushionWidth*0.2;
+        let strutWidth = thickness;
+        let strutHeight = thickness * 0.5;
+        let sideBarXLength = cushionWidth * 1.5;
+        const sideBarX_geom = new THREE.BoxGeometry(sideBarXLength, strutHeight, strutWidth);
+        const sideBarX = new THREE.Mesh(sideBarX_geom, metal_mat);
+        sideBarX.position.y = -thickness;
+        this.shapes.push(sideBarX);
+        //left and right sidebars
+        let sideBarYLength = cushionWidth*0.7;
+        const sideBarY_geom = new THREE.BoxGeometry(strutHeight, sideBarYLength, strutWidth);
+        //left
+        const sideBarYL = new THREE.Mesh(sideBarY_geom, metal_mat);
+        sideBarYL.position.x = -sideBarXLength/2;
+        sideBarYL.position.y = thickness * 0.5;
+        this.shapes.push(sideBarYL);
+        //right
+        const sideBarYR = new THREE.Mesh(sideBarY_geom, metal_mat);
+        sideBarYR.position.x = sideBarXLength/2;
+        sideBarYR.position.y = thickness * 0.5;
+        this.shapes.push(sideBarYR);
+        //Now the armrests
+        const armRest_geom = new THREE.BoxGeometry(cushionWidth * 0.2, thickness*0.7, cushionLength*0.8);
+        //left
+        const armRestL = new THREE.Mesh(armRest_geom, blackFabric_mat);
+        armRestL.position.x = -(sideBarXLength/2);
+        armRestL.position.y = sideBarYLength * 0.6;
+        this.shapes.push(armRestL);
+        //right
+        const armRestR = new THREE.Mesh(armRest_geom, blackFabric_mat);
+        armRestR.position.x = (sideBarXLength/2);
+        armRestR.position.y = sideBarYLength * 0.6;
+        this.shapes.push(armRestR);
+
+    }
+}

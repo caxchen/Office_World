@@ -141,7 +141,7 @@ export function addFurniture(scene) {
     desk.translate(0, -0.88, 1.25);
     //desk.rotateY(rad(20))
     desk.addToScene(scene);
-    let executiveChair = new Prefabs.Chair(scene);
+    let executiveChair = new Prefabs.ExecutiveChair(scene);
     executiveChair.addToScene(scene);
 }
 
