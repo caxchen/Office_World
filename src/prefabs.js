@@ -351,6 +351,42 @@ export class ExecutiveChair extends Chair {
         armRestR.position.x = (sideBarXLength/2);
         armRestR.position.y = sideBarYLength * 0.6;
         this.shapes.push(armRestR);
+    }
+}
 
+
+export class CeilingLight extends Prefab {
+    constructor(scene, activated=true) {
+        super(scene);
+        //PointLight( color : Integer, intensity : Float, distance : Number, decay : Float )
+        let lightColor = 0xfffefa;
+        let support_mat = new THREE.MeshLambertMaterial({
+            emissive:lightColor,
+        })
+        if (!activated) {
+            lightColor = 0xc2c2c2;
+            support_mat = new THREE.MeshLambertMaterial({
+                color:lightColor,
+            })
+        }
+        else {
+            const light = new THREE.PointLight(lightColor, 0.6, 10, 2);
+            light.position.y = -0.1;
+            this.shapes.push(light);
+        }
+        let radius = 0.14;
+        const shield_geom = new THREE.CylinderGeometry(radius, radius, radius*0.1, 8, 1, false);
+        const shield_mat = new THREE.MeshPhongMaterial({
+            color:0x4d4d4d,
+            reflectivity: 1.0,
+            shininess: 200.0,
+        })
+        const shield = new THREE.Mesh(shield_geom, shield_mat);
+        this.shapes.push(shield);
+        shield.position.y = - (radius*0.3);
+        const supportRad = radius * 0.3;
+        const support_geom = new THREE.CylinderGeometry(supportRad, supportRad, radius*0.4, 8, 1, true);
+        const support = new THREE.Mesh(support_geom, support_mat);
+        this.shapes.push(support);
     }
 }

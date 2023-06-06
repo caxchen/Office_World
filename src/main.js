@@ -30,15 +30,15 @@ function main() {
   const near = 0.1;
   const far = 100;
   const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-  camera.position.z = -1; //forward will be from - looking at +
-  camera.position.y = 0;
+  camera.position.z = -3; //forward will be from - looking at +
+  camera.position.y = -0;
 
   const renderer = new THREE.WebGLRenderer({antialias: true, canvas});
   const composer = new EffectComposer( renderer );
   const renderPass = new RenderPass( scene, camera );
   composer.addPass( renderPass );
   const controls = new OrbitControls( camera, renderer.domElement );
-  controls.target = new THREE.Vector3(0,0,1);
+  controls.target = new THREE.Vector3(0,0.6,0);
   //const glitchPass = new GlitchPass();
   //composer.addPass( glitchPass );
 
@@ -53,7 +53,8 @@ function main() {
   Layout.createLayout(scene);
   Layout.addFurniture(scene);
   Layout.addHeronLissus(scene);
-  addTestLighting(scene);
+  Layout.addLights(scene);
+  //addTestLighting(scene);
 
 
   renderer.render(scene, camera);

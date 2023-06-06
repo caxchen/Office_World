@@ -14,7 +14,11 @@ function rad(deg) {
 }
 
 
-
+let officeDimensions = {
+  x:5,
+  y:2,
+  z:5,
+}
 export function createLayout(scene) {
   const white_mat = new THREE.MeshPhysicalMaterial({
     color:0xffffff,
@@ -42,6 +46,9 @@ export function createLayout(scene) {
   let roomx = 6.5;
   let roomz = 6;
   let roomy = 2;
+  officeDimensions.x = roomx;
+  officeDimensions.y = roomy;
+  officeDimensions.z = roomz;
   let thickness = 0.1;
   const floor_geom = new THREE.BoxGeometry(roomx,thickness,roomz);
   const floor = new THREE.Mesh(floor_geom, white_mat);
@@ -192,8 +199,6 @@ export function addHeronLissus(scene) {
     //function() { console.log("inprogress") },
     //function() { console.log("error")}
   )
-
-
   /* DELETED LINE SEGMENTS AT END
   l 5426 9421
   l 10893 10915
@@ -204,4 +209,47 @@ export function addHeronLissus(scene) {
   l 12280 12302
   l 1384 5437
   */
+}
+
+export function addLights(scene) {
+  //ambient light
+  const ambient = new THREE.AmbientLight( 0x383838 );
+  scene.add(ambient);
+
+  //ceiling lights
+  let x = (officeDimensions.x/2) * 0.6;
+  let y = (officeDimensions.y/2) * 0.95;
+  let z = (officeDimensions.z/2) * 0.7;
+  //left (from Heron's perspective)
+  const lightL1 = new Prefabs.CeilingLight(scene, false);
+  lightL1.translate(-x, y, z);
+  lightL1.addToScene(scene);
+  const lightL2 = new Prefabs.CeilingLight(scene, false);
+  lightL2.translate(-x, y, 0);
+  lightL2.addToScene(scene);
+  const lightL3 = new Prefabs.CeilingLight(scene, true);
+  lightL3.translate(-x, y, -z);
+  lightL3.addToScene(scene);
+  //right (from Heron's perspective)
+  const lightR1 = new Prefabs.CeilingLight(scene, false);
+  lightR1.translate(x, y, z);
+  lightR1.addToScene(scene);
+  const lightR2 = new Prefabs.CeilingLight(scene, false);
+  lightR2.translate(x, y, 0);
+  lightR2.addToScene(scene);
+  const lightR3 = new Prefabs.CeilingLight(scene, true);
+  lightR3.translate(x, y, -z);
+  lightR3.addToScene(scene);
+
+  let sunx = 0;
+  let suny = 2;
+  let sunz = 1;
+  const sunlight = new THREE.DirectionalLight( 0xffffff, 0.5 );
+  sunlight.position.set(sunx,suny,sunz);
+  scene.add( sunlight );
+  const sphere_geom = new THREE.SphereGeometry(0.5);
+  const red_mat = new THREE.MeshBasicMaterial({color:0xff0000});
+  const targeter = new THREE.Mesh(sphere_geom, red_mat);
+  targeter.position.set(sunx,suny,sunz);
+  scene.add(targeter);
 }
