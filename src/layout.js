@@ -140,12 +140,12 @@ export function createLayout(scene) {
 
 
 export function addFurniture(scene) {
-    let desk = new Prefabs.Desk(scene, 0.8);
+    let desk = new Prefabs.Desk(scene, 0.77);
     desk.translate(0, -0.88, 1.25);
-    //desk.rotateY(rad(20))
+    //desk.rotateY(rad(20));
     desk.addToScene(scene);
     let executiveChair = new Prefabs.ExecutiveChair(scene, 0.7);
-    executiveChair.translate(0, -0.47, 2.1);
+    executiveChair.translate(0, -0.47, 1.8);
     executiveChair.addToScene(scene);
 
     const white_mat = new THREE.MeshPhysicalMaterial({
@@ -167,28 +167,24 @@ function testAnimate(prefab) {
 export function addHeronLissus(scene) {
   const mtlLoader = new MTLLoader();
   //const objLoader = new OBJLoader();
-  //mtlLoader.setPath('resources/Heron_Lissus/Heron_Lissus.mtl');
-  mtlLoader.setPath( './resources/Heron_Lissus/' );
+  mtlLoader.setPath( './resources/Heron_Lissus/obj&mtl_pose2/' );
   mtlLoader.load(
     'Heron_Lissus.mtl',
     function(materials) {
       materials.preload();
       const objLoader = new OBJLoader();
-      objLoader.setMaterials(materials);//resources\Heron_Lissus\textures\Heron_Lissus2_MergedMat_BaseColor.png
-      //console.log(objLoader.materials);
-      //console.log(materials.materials.Material);
-      //const testCube = new THREE.BoxGeometry(1,1,1);
-      //const testMesh = new THREE.Mesh(testCube, materials.materials.Material);
-      //console.log(testMesh);
-      //scene.add(testMesh);
-
+      objLoader.setMaterials(materials);
       objLoader.load(
-        '../resources/Heron_Lissus/Heron_Lissus.obj',
+        '../resources/Heron_Lissus/obj&mtl_pose2/Heron_Lissus.obj',
         function(object) {
-          //console.log(object);
-          //object.material = materials.materials.Material;
+          //fix the emissive not showing
           object.children[0].material.emissive = new THREE.Color(0xffffff);
-          //console.log(object.children[0].material.emissive);
+          //now position and scale Heron
+          let scale = 0.53;
+          object.scale.set(scale,scale,scale);
+          object.rotation.y = rad(180);
+          object.position.z = 1.75;
+          object.position.y = -0.9;
           scene.add(object)
         }
       )
@@ -196,67 +192,7 @@ export function addHeronLissus(scene) {
     //function() { console.log("inprogress") },
     //function() { console.log("error")}
   )
-  /*const gltfLoader = new GLTFLoader();
-  gltfLoader.load(
-    // resource URL
-    'resources/Heron_Lissus/gltf2/Heron_Lissus_backupdownload.gltf',
-    // called when the resource is loaded
-    function ( gltf ) {
-  
-      scene.add( gltf.scene );
-  
-      gltf.animations; // Array<THREE.AnimationClip>
-      gltf.scene; // THREE.Group
-      gltf.scenes; // Array<THREE.Group>
-      gltf.cameras; // Array<THREE.Camera>
-      gltf.asset; // Object
-  
-    }
-  )*/
-  /*objLoader.setMaterials(materials);//resources\Heron_Lissus\textures\Heron_Lissus2_MergedMat_BaseColor.png
-      //console.log(objLoader.materials);
-      //console.log(materials.materials.Material);
-      const testCube = new THREE.BoxGeometry(1,1,1);
-      const testMesh = new THREE.Mesh(testCube, materials.materials.Material);
-      console.log(testMesh);
-      scene.add(testMesh);
-      objLoader.load(
-        '../resources/Heron_Lissus/Heron_Lissus.obj',
-        function(object) {
-          //console.log(object);
-          //object.material = materials.materials.Material;
-          console.log(object);
-          scene.add(object)
-        }
-      )*/
-  
-      /*const onProgress = function ( xhr ) {
 
-        if ( xhr.lengthComputable ) {
-
-          const percentComplete = xhr.loaded / xhr.total * 100;
-          console.log( Math.round( percentComplete, 2 ) + '% downloaded' );
-
-        }
-
-      };
-      new MTLLoader()
-      .setPath( './resources/Heron_Lissus/' )
-      .load( 'Heron_Lissus.mtl', function ( materials ) {
-
-        materials.preload();
-
-        new OBJLoader()
-          .setMaterials( materials )
-          .setPath( './resources/Heron_Lissus/' )
-          .load( 'Heron_Lissus.obj', function ( object ) {
-
-            //object.position.y = - 95;
-            scene.add( object );
-
-          }, onProgress );
-
-      } );*/
 
   /* DELETED LINE SEGMENTS AT END
   l 5426 9421
