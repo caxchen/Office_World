@@ -11,4 +11,6 @@ map_Kd textures/Heron_Lissus2_MergedMat_BaseColor.png
 map_Ns textures/Heron_Lissus2_MergedMat_Roughness.png
 map_refl textures/Heron_Lissus2_MergedMat_Metallic.png
 map_Ke textures/Heron_Lissus2_MergedMat_Emissive.png
-map_Bump -bm 1.000000 textures/Heron_Lissus2_MergedMat_Normal.png
+
+# map_Bump -bm 1.000000 textures/Heron_Lissus2_MergedMat_Normal.png
+map_Bump -bm 0.05 textures/Heron_Lissus2_MergedMat_Normal.png
