@@ -1,0 +1,14 @@
+# Blender 3.4.1 MTL File: 'Heron_Lissus_backupdownload.blend'
+# www.blender.org
+
+newmtl Material
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd C:/Heron_Lissus2_MergedMat_BaseColor.png
+map_Ns C:/Heron_Lissus2_MergedMat_Roughness.png
+map_refl C:/Heron_Lissus2_MergedMat_Metallic.png
+map_Ke C:/Heron_Lissus2_MergedMat_Emissive.png
+map_Bump -bm 1.000000 C:/Heron_Lissus2_MergedMat_Normal.png

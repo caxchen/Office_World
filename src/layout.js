@@ -4,6 +4,8 @@
  */
 import * as Prefabs from './prefabs.js';
 import * as THREE from 'three';
+import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
+import { MTLLoader } from 'three/addons/loaders/MTLLoader.js';
 
 
 function rad(deg) {
@@ -141,13 +143,58 @@ export function addFurniture(scene) {
     desk.translate(0, -0.88, 1.25);
     //desk.rotateY(rad(20))
     desk.addToScene(scene);
-    let executiveChair = new Prefabs.ExecutiveChair(scene, 0.75);
-    executiveChair.translate(0, -0.41, 2.1);
+    let executiveChair = new Prefabs.ExecutiveChair(scene, 0.7);
+    executiveChair.translate(0, -0.47, 2.1);
     executiveChair.addToScene(scene);
 }
 
-    //requestAnimationFrame(()=>{testAnimate(desk)});
+//requestAnimationFrame(()=>{testAnimate(desk)});
 function testAnimate(prefab) {
     prefab.rotateY(rad(0.1));
     requestAnimationFrame(()=>{testAnimate(prefab)});
+}
+
+export function addHeronLissus(scene) {
+  const mtlLoader = new MTLLoader();
+  //const objLoader = new OBJLoader();
+  //mtlLoader.setPath('resources/Heron_Lissus/Heron_Lissus.mtl');
+  mtlLoader.setPath( './resources/Heron_Lissus/' );
+  mtlLoader.load(
+    'Heron_Lissus.mtl',
+    function(materials) {
+      materials.preload();
+      const objLoader = new OBJLoader();
+      objLoader.setMaterials(materials);
+      objLoader.load(
+        '../resources/Heron_Lissus/Heron_Lissus.obj',
+        function(object) {
+          scene.add(object)
+        }
+      )
+    },
+    function() { console.log("inprogress") },
+    function() { console.log("error")}
+  )
+  /*objLoader.load(
+    // resource URL
+    'resources/Heron_Lissus.obj',
+    // called when resource is loaded
+    function ( object ) {
+      console.log(object);
+      scene.add( object );
+
+    },
+    // called when loading is in progresses
+    function ( xhr ) {
+
+      console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+
+    },
+    // called when loading has errors
+    function ( error ) {
+
+      console.log( 'An error happened' );
+
+    }
+  );*/
 }

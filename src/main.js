@@ -52,6 +52,7 @@ function main() {
   createSkybox(scene);
   Layout.createLayout(scene);
   Layout.addFurniture(scene);
+  Layout.addHeronLissus(scene);
   addTestLighting(scene);
 
 
