@@ -45,13 +45,14 @@ function main() {
   activeCamera = camera;
 
   const renderer = new THREE.WebGLRenderer({antialias: true, canvas});
+  console.log(renderer.getRenderTarget());
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   //const composer = new EffectComposer( renderer );
   //const renderPass = new RenderPass( scene, camera );
   //composer.addPass( renderPass );
   let controls = new OrbitControls( camera, renderer.domElement );
-  controls.target = new THREE.Vector3(0,-0.1,0);
+  controls.target = new THREE.Vector3(0,0.1,0);
   //const glitchPass = new GlitchPass();
   //composer.addPass( glitchPass );
 
@@ -92,12 +93,13 @@ function main() {
       accumulated = 0;
 
       //Main tick code here!
+      for (let i=0; i<animatedObjects.length; i++) {
+        animatedObjects[i].animate(renderer);
+      }
+      renderer.setRenderTarget(null);
       renderer.render(scene, activeCamera);
       //composer.render();
       controls.update();
-      for (let i=0; i<animatedObjects.length; i++) {
-        animatedObjects[i].animate();
-      }
 
     }
     lastTick = performance.now()

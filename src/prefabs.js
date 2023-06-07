@@ -475,3 +475,87 @@ export class DataReading extends Prefab {
         }
     }
 }
+
+
+export class Display extends Prefab {
+    constructor(scene) {
+        super(scene);
+        let width = 0.28;      
+        this.renderTarget = new THREE.WebGLRenderTarget(width*500,width*500);
+        this.displayScene = new THREE.Scene();
+        //this.displayScene.background = new THREE.Color(0xb0ffd7);
+        this.camera = new THREE.PerspectiveCamera(100, 1, 0.1,100);
+        //this.camera = new THREE.OrthographicCamera( 6, 6, 6, 6, 0.05, 1000 );
+        const display_geom = new THREE.PlaneGeometry(width,width);
+        const display_mat = new THREE.MeshBasicMaterial({
+            //main holo color 70f5ff
+            //color:0xb0ffd7,
+            transparent:true,
+            opacity:0.7,
+            //side: THREE.DoubleSide,
+            map:this.renderTarget.texture,
+        });
+        this.display = new THREE.Mesh(display_geom, display_mat);
+
+        const gasGiant_geom = new THREE.SphereGeometry(0.3);
+        const gasGiant_mat = new THREE.MeshBasicMaterial({
+            color:0xffa347,
+            side:THREE.DoubleSide,
+        })
+        const gasGiant = new THREE.Mesh(gasGiant_geom, gasGiant_mat);
+        gasGiant.position.z = -2
+        this.shapes.push(gasGiant);
+        const ring_geom = new THREE.RingGeometry(0.6, 0.7, 9);
+        const ring = new THREE.Mesh(ring_geom, gasGiant_mat);
+        ring.position.z = -2;
+        //ring.rotation.x = rad(180);
+        this.shapes.push(ring);
+
+        const orbiter_geom = new THREE.TetrahedronGeometry(0.3);
+        const orbiter_mat = new THREE.MeshBasicMaterial({
+            color:0x9e1919
+        })
+        this.orbiter = new THREE.Mesh(orbiter_geom, orbiter_mat);
+        this.orbiter.position.z = -2;
+        this.orbiter.position.y = 1.7;
+        this.orbiter.rotation.z += -rad(35);
+        this.shapes.push(this.orbiter);
+        this.orbiterAngle = 0;
+        this.orbitSpeed = rad(0.1);
+    }
+
+    addToScene(scene=this.scene) {
+        for (let i=0; i<this.shapes.length; i++) {
+            this.displayScene.add(this.shapes[i])
+        }
+        scene.add(this.display);
+    }
+
+    animate(renderer) {
+        renderer.setRenderTarget(this.renderTarget);
+        renderer.render(this.displayScene, this.camera);
+        renderer.setRenderTarget(null);
+
+        //transform and rotate orbiter
+        let zAxis = new THREE.Vector3(0,0,1);
+        this.orbiter.position.applyAxisAngle(zAxis, this.orbitSpeed);
+        this.orbiter.rotateOnWorldAxis(zAxis, this.orbitSpeed);
+    }
+
+    translate(x=0,y=0,z=0) {
+        this.display.position.x += x;
+        this.display.position.y += y;
+        this.display.position.z += z;
+    }
+
+    rotateY(rad, pointCoords=[0,0,0]) {
+        let yAxis = new THREE.Vector3(0,1,0);
+        let point = new THREE.Vector3(pointCoords[0],pointCoords[1],pointCoords[2]);
+        for (let i=0; i<this.shapes.length; i++) {
+            this.display.position.sub(point); // remove the offset
+            this.display.position.applyAxisAngle(yAxis, rad); // rotate the POSITION
+            this.display.rotateOnWorldAxis(yAxis, rad);
+            this.display.position.add(point); // re-add the offset
+        }
+    }
+}

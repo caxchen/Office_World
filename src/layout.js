@@ -183,6 +183,12 @@ export function addFurniture(scene) {
   dataReading.addToScene(scene);
   animatedObjects.push(dataReading);
 
+  let display = new Prefabs.Display(scene);
+  display.addToScene(scene);
+  display.rotateY(-rad(3));
+  display.translate(0.24, 0.24, 1);
+  animatedObjects.push(display);
+
   return animatedObjects;
 }
 
@@ -274,7 +280,8 @@ export function addLights(scene) {
   //sunlight.shadow.camera = new THREE.OrthographicCamera( -100, 100, 100, -100, 0.5, 1000 )
   //console.log(sunlight.shadow.camera);
   const d = 10
-  sunlight.shadow.camera = new THREE.OrthographicCamera( -d, d, d, -d, 0.5, 1000 )
+  sunlight.shadow.camera = new THREE.OrthographicCamera( -d, d, d, -d, 0.5, 1000 );
+  //sunlight.shadow.normalBias = -1;
   sunlight.position.set(sunx,suny,sunz);
   scene.add( sunlight );
   const sphere_geom = new THREE.SphereGeometry(0.5);
