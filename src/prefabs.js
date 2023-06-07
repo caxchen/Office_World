@@ -410,14 +410,55 @@ export class DataReading extends Prefab {
         let lineHeight = lineLength * 0.07;
         let between = lineLength*0.15;
         const data_geom = new THREE.PlaneGeometry(lineLength, lineHeight);
+        const data_mat = new THREE.MeshBasicMaterial({
+            //main holo color 70f5ff
+            color:0xb0ffd7,
+            transparent:true,
+            opacity:0.8,
+            side: THREE.DoubleSide,
+        })
         for (let i=0; i<lines; i++) {
-            const newLine = new THREE.Mesh(data_geom, hologram_mat);
+            const newLine = new THREE.Mesh(data_geom, data_mat);
             newLine.position.y -= i*between;
             this.shapes.push(newLine);
+        }
+        this.top = 0;
+        this.bottom = this.shapes[this.shapes.length-1].position.y;
+        this.speed = lineLength * 0.01;
+    }
+
+    translate(x=0,y=0,z=0) {
+        for (let i=0; i<this.shapes.length; i++) {
+            this.shapes[i].position.x += x;
+            this.shapes[i].position.y += y;
+            this.shapes[i].position.z += z;
+        }
+        this._getHighest();
+        this._getLowest();
+    }
+
+    _getHighest() {
+        this.top = -Infinity;
+        for (let i=0; i<this.shapes.length; i++) {
+            let gotY = this.shapes[i].position.y;
+            if (gotY > this.top) this.top = gotY
+        }
+    }
+
+    _getLowest() {
+        this.bottom = Infinity;
+        for (let i=0; i<this.shapes.length; i++) {
+            let gotY = this.shapes[i].position.y;
+            if (gotY < this.bottom) this.bottom = gotY
         }
     }
 
     animate() {
-        //console.log("OSIJDF");
+        for (let i=0; i<this.shapes.length; i++) {
+            this.shapes[i].position.y -= this.speed;
+            if (this.shapes[i].position.y < this.bottom) {
+                this.shapes[i].position.y = this.top;
+            }
+        }
     }
 }

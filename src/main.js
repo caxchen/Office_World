@@ -72,12 +72,15 @@ function main() {
     accumulated += elapsed;
     if (accumulated >= 1000/fps) {
       accumulated = 0;
+
+      //Main tick code here!
       renderer.render(scene, camera);
       //composer.render();
       controls.update();
       for (let i=0; i<animatedObjects.length; i++) {
         animatedObjects[i].animate();
       }
+      
     }
     lastTick = performance.now()
     requestAnimationFrame(tick);
