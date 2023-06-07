@@ -162,9 +162,19 @@ export function addFurniture(scene) {
   desk.translate(0, -0.88, 1.25);
   //desk.rotateY(rad(20));
   desk.addToScene(scene);
-  let executiveChair = new Prefabs.ExecutiveChair(scene, 0.7);
+  let chairScale = 0.7;
+  let executiveChair = new Prefabs.ExecutiveChair(scene, chairScale);
   executiveChair.translate(0, -0.47, 1.8);
   executiveChair.addToScene(scene);
+
+  let chairL = new Prefabs.Chair(scene, chairScale);
+  chairL.rotateY(rad(200));
+  chairL.translate(-0.6, -0.47, 0.6);
+  chairL.addToScene(scene);
+  let chairR = new Prefabs.Chair(scene, chairScale);
+  chairR.rotateY(rad(160));
+  chairR.translate(0.6, -0.47, 0.6);
+  chairR.addToScene(scene);
 
   let animatedObjects = [];
   let dataReading = new Prefabs.DataReading(scene, 0.4, 7);

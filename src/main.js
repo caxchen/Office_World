@@ -17,6 +17,8 @@ let mouse = {
 }
 
 let allHeight = 10;
+let activeCamera = null;
+let cameras = [];
 
 function main() {
   const canvas = document.querySelector('#c');
@@ -30,8 +32,17 @@ function main() {
   const near = 0.1;
   const far = 100;
   const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-  camera.position.z = 2; //forward will be from - looking at +
-  camera.position.y = 0.5;
+  camera.position.z = -1.3; //forward will be from - looking at +
+  camera.position.y = 0.1;
+  cameras.push(camera);
+
+  const camera2 = new THREE.PerspectiveCamera(82, 2, 0.3, 50);
+  camera2.position.z = 1.9;
+  camera2.position.y = 0.3;
+  camera2.rotation.x = rad(-12);
+  cameras.push(camera2);
+
+  activeCamera = camera;
 
   const renderer = new THREE.WebGLRenderer({antialias: true, canvas});
   renderer.shadowMap.enabled = true;
@@ -39,17 +50,24 @@ function main() {
   //const composer = new EffectComposer( renderer );
   //const renderPass = new RenderPass( scene, camera );
   //composer.addPass( renderPass );
-  const controls = new OrbitControls( camera, renderer.domElement );
-  controls.target = new THREE.Vector3(0,-0.6,0);
+  let controls = new OrbitControls( camera, renderer.domElement );
+  controls.target = new THREE.Vector3(0,-0.1,0);
   //const glitchPass = new GlitchPass();
   //composer.addPass( glitchPass );
 
-  const loader = new THREE.TextureLoader();
+  //controls = new OrbitControls(camera2, renderer.domElement);
+
+
+  /*const loader = new THREE.TextureLoader();
 
   const test_mat = new THREE.MeshPhongMaterial({
     //color: 0x7d7d7d,
     map: loader.load("resources/awkward_cat.jpg")
-  });
+  });*/
+
+  //Hook up html
+  let button = document.getElementById("switchPerspectives");
+  button.onclick = switchPerspectives;
 
   createSkybox(scene);
   Layout.createLayout(scene);
@@ -74,7 +92,7 @@ function main() {
       accumulated = 0;
 
       //Main tick code here!
-      renderer.render(scene, camera);
+      renderer.render(scene, activeCamera);
       //composer.render();
       controls.update();
       for (let i=0; i<animatedObjects.length; i++) {
@@ -95,6 +113,11 @@ function main() {
 } //main() brace
 main();
 
+
+export function switchPerspectives() {
+  if (activeCamera == cameras[0]) activeCamera = cameras[1];
+  else activeCamera = cameras[0];
+}
 
 function rad(deg) {
   return deg * (Math.PI/180);
