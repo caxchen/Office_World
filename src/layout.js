@@ -158,22 +158,20 @@ export function createLayout(scene) {
 
 
 export function addFurniture(scene) {
-    let desk = new Prefabs.Desk(scene, 0.77);
-    desk.translate(0, -0.88, 1.25);
-    //desk.rotateY(rad(20));
-    desk.addToScene(scene);
-    let executiveChair = new Prefabs.ExecutiveChair(scene, 0.7);
-    executiveChair.translate(0, -0.47, 1.8);
-    executiveChair.addToScene(scene);
+  let desk = new Prefabs.Desk(scene, 0.77);
+  desk.translate(0, -0.88, 1.25);
+  //desk.rotateY(rad(20));
+  desk.addToScene(scene);
+  let executiveChair = new Prefabs.ExecutiveChair(scene, 0.7);
+  executiveChair.translate(0, -0.47, 1.8);
+  executiveChair.addToScene(scene);
 
-    const white_mat = new THREE.MeshPhysicalMaterial({
-      color:0xffffff,
-      //roughness: 0.45,
-      clearcoat: 0.5,
-    })
-    let test_mat = new THREE.MeshBasicMaterial();
-    test_mat = white_mat.clone();
-    //console.log(test_mat.type);
+  let animatedObjects = [];
+  let dataReading = new Prefabs.DataReading(scene);
+  dataReading.addToScene(scene);
+  animatedObjects.push(dataReading);
+
+  return animatedObjects;
 }
 
 //requestAnimationFrame(()=>{testAnimate(desk)});

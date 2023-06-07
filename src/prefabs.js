@@ -401,3 +401,23 @@ export class CeilingLight extends Prefab {
         this.shapes.push(support);
     }
 }
+
+export class DataReading extends Prefab {
+    constructor(scene) {
+        super(scene);
+        let lines = 5;
+        let lineLength = 0.5;
+        let lineHeight = lineLength * 0.07;
+        let between = lineLength*0.15;
+        const data_geom = new THREE.PlaneGeometry(lineLength, lineHeight);
+        for (let i=0; i<lines; i++) {
+            const newLine = new THREE.Mesh(data_geom, hologram_mat);
+            newLine.position.y -= i*between;
+            this.shapes.push(newLine);
+        }
+    }
+
+    animate() {
+        //console.log("OSIJDF");
+    }
+}

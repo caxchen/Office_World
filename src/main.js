@@ -53,7 +53,7 @@ function main() {
 
   createSkybox(scene);
   Layout.createLayout(scene);
-  Layout.addFurniture(scene);
+  const animatedObjects = Layout.addFurniture(scene);
   Layout.addHeronLissus(scene);
   Layout.addLights(scene);
   //addTestLighting(scene);
@@ -61,13 +61,32 @@ function main() {
 
   renderer.render(scene, camera);
 
-  function render(time) {
-    renderer.render(scene, camera);
-    //composer.render();
-    controls.update();
-    requestAnimationFrame(render);
-  }
-  requestAnimationFrame(render);
+  let lastTick = performance.now();
+  let thisTick = performance.now();
+  let accumulated = 0;
+  let fps = 60;
+
+  function tick(time) {
+    thisTick = performance.now()
+    let elapsed = (thisTick-lastTick);
+    accumulated += elapsed;
+    if (accumulated >= 1000/fps) {
+      accumulated = 0;
+      renderer.render(scene, camera);
+      //composer.render();
+      controls.update();
+      for (let i=0; i<animatedObjects.length; i++) {
+        animatedObjects[i].animate();
+      }
+    }
+    lastTick = performance.now()
+    requestAnimationFrame(tick);
+
+  } //tick brace
+
+
+
+  requestAnimationFrame(tick);
 
 
 } //main() brace
