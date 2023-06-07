@@ -167,7 +167,9 @@ export function addFurniture(scene) {
   executiveChair.addToScene(scene);
 
   let animatedObjects = [];
-  let dataReading = new Prefabs.DataReading(scene);
+  let dataReading = new Prefabs.DataReading(scene, 0.4, 7);
+  dataReading.rotateY(rad(10));
+  dataReading.translate(-0.3, 0.36, 1);
   dataReading.addToScene(scene);
   animatedObjects.push(dataReading);
 

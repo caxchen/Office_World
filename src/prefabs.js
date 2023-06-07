@@ -403,10 +403,10 @@ export class CeilingLight extends Prefab {
 }
 
 export class DataReading extends Prefab {
-    constructor(scene) {
+    constructor(scene, scale, lines=7) {
         super(scene);
-        let lines = 5;
-        let lineLength = 0.5;
+        //let lines = 8;
+        let lineLength = 0.5 * scale;
         let lineHeight = lineLength * 0.07;
         let between = lineLength*0.15;
         const data_geom = new THREE.PlaneGeometry(lineLength, lineHeight);
@@ -415,7 +415,7 @@ export class DataReading extends Prefab {
             color:0xb0ffd7,
             transparent:true,
             opacity:0.8,
-            side: THREE.DoubleSide,
+            //side: THREE.DoubleSide,
         })
         for (let i=0; i<lines; i++) {
             const newLine = new THREE.Mesh(data_geom, data_mat);

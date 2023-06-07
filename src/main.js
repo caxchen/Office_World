@@ -30,7 +30,7 @@ function main() {
   const near = 0.1;
   const far = 100;
   const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-  camera.position.z = -3; //forward will be from - looking at +
+  camera.position.z = 3; //forward will be from - looking at +
   camera.position.y = -0;
 
   const renderer = new THREE.WebGLRenderer({antialias: true, canvas});
@@ -40,7 +40,7 @@ function main() {
   //const renderPass = new RenderPass( scene, camera );
   //composer.addPass( renderPass );
   const controls = new OrbitControls( camera, renderer.domElement );
-  controls.target = new THREE.Vector3(0,0.6,0);
+  controls.target = new THREE.Vector3(0,-0.6,0);
   //const glitchPass = new GlitchPass();
   //composer.addPass( glitchPass );
 
@@ -80,7 +80,7 @@ function main() {
       for (let i=0; i<animatedObjects.length; i++) {
         animatedObjects[i].animate();
       }
-      
+
     }
     lastTick = performance.now()
     requestAnimationFrame(tick);
