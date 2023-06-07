@@ -34,9 +34,11 @@ function main() {
   camera.position.y = -0;
 
   const renderer = new THREE.WebGLRenderer({antialias: true, canvas});
-  const composer = new EffectComposer( renderer );
-  const renderPass = new RenderPass( scene, camera );
-  composer.addPass( renderPass );
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  //const composer = new EffectComposer( renderer );
+  //const renderPass = new RenderPass( scene, camera );
+  //composer.addPass( renderPass );
   const controls = new OrbitControls( camera, renderer.domElement );
   controls.target = new THREE.Vector3(0,0.6,0);
   //const glitchPass = new GlitchPass();
@@ -60,8 +62,8 @@ function main() {
   renderer.render(scene, camera);
 
   function render(time) {
-    //renderer.render(scene, camera);
-    composer.render();
+    renderer.render(scene, camera);
+    //composer.render();
     controls.update();
     requestAnimationFrame(render);
   }

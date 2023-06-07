@@ -41,6 +41,13 @@ class Prefab {
             this.shapes[i].scale.set(scale,scale,scale);
         }
     }
+
+    enableAllShadows() {
+        for (let i=0; i<this.shapes.length; i++) {
+            this.shapes[i].castShadow = true;
+            this.shapes[i].receiveShadow = true;
+        }
+    }
 }
 
 const white_mat = new THREE.MeshPhysicalMaterial({
@@ -231,6 +238,8 @@ export class Desk extends Prefab {
         xPanelRB.position.y = deskHeight/2;
         xPanelRB.position.x = bottomPanelX;
         this.shapes.push(xPanelRB);
+
+        this.enableAllShadows();
     }
 
 }
@@ -309,7 +318,7 @@ export class Chair extends Prefab {
         wheelRight.position.y = wheelY;
         wheelRight.position.x = wheelSideOffset;
         this.shapes.push(wheelRight);
-
+        this.enableAllShadows();
     }
 }
 
@@ -351,6 +360,8 @@ export class ExecutiveChair extends Chair {
         armRestR.position.x = (sideBarXLength/2);
         armRestR.position.y = sideBarYLength * 0.6;
         this.shapes.push(armRestR);
+
+        this.enableAllShadows();
     }
 }
 
@@ -370,7 +381,7 @@ export class CeilingLight extends Prefab {
             })
         }
         else {
-            const light = new THREE.PointLight(lightColor, 0.6, 10, 2);
+            const light = new THREE.PointLight(lightColor, 0.5, 10, 2);
             light.position.y = -0.1;
             this.shapes.push(light);
         }

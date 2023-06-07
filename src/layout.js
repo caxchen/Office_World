@@ -53,17 +53,24 @@ export function createLayout(scene) {
   const floor_geom = new THREE.BoxGeometry(roomx,thickness,roomz);
   const floor = new THREE.Mesh(floor_geom, white_mat);
   floor.position.y = -roomy / 2;
+  floor.receiveShadow = true;
   scene.add(floor);
   const roof = new THREE.Mesh(floor_geom, white_mat);
   roof.position.y = roomy / 2;
+  roof.castShadow = true;
+  roof.receiveShadow = true;
   scene.add(roof);
 
   const sideWallGeom = new THREE.BoxGeometry(thickness,roomy,roomz);
   const leftWall = new THREE.Mesh(sideWallGeom, white_mat);
   leftWall.position.x = roomx / 2;
+  leftWall.castShadow = true;
+  leftWall.receiveShadow = true;
   scene.add(leftWall);
   const rightWall = new THREE.Mesh(sideWallGeom, white_mat);
   rightWall.position.x = -roomx / 2;
+  rightWall.castShadow = true;
+  rightWall.receiveShadow = true;
   scene.add(rightWall);
 
   let fsx = (roomx/2) * 0.87;//front side x
@@ -116,15 +123,17 @@ export function createLayout(scene) {
   horizontalLiningBottom.position.y = - (roomy/2) + strutWidth;
   horizontalLiningBottom.position.z = roomz/2;
   horizontalLiningBottom.position.y += strutInwardOffset;
+  //horizontalLiningBottom.castShadow = true;
   scene.add(horizontalLiningBottom);
   const horizontalLiningTop = new THREE.Mesh(horizontalLining_geom, blackLining_mat);
   horizontalLiningTop.position.y = (roomy/2) - strutWidth;
   horizontalLiningTop.position.z = roomz/2;
   horizontalLiningTop.position.y -= strutInwardOffset;
+  //horizontalLiningTop.castShadow = true;
   scene.add(horizontalLiningTop);
   //vertical struts
   //counting from sides:  L1 L2 R2 R1
-  const verticalStrut_geom = new THREE.BoxGeometry(strutWidth, roomy-thickness, strutThickness);
+  const verticalStrut_geom = new THREE.BoxGeometry(strutWidth*1, (roomy-thickness), strutThickness);
   const verticalStrutL1 = new THREE.Mesh(verticalStrut_geom, blackLining_mat);
   verticalStrutL1.position.x = roomx/2 - strutWidth;
   verticalStrutL1.position.z = roomz/2;
@@ -138,10 +147,12 @@ export function createLayout(scene) {
   const verticalStrutL2 = new THREE.Mesh(verticalStrut_geom, blackLining_mat);
   verticalStrutL2.position.x = (roomx/3) /2;
   verticalStrutL2.position.z = roomz/2;
+  verticalStrutL2.castShadow = true;
   scene.add(verticalStrutL2);
   const verticalStrutR2 = new THREE.Mesh(verticalStrut_geom, blackLining_mat);
   verticalStrutR2.position.x = -(roomx/3) /2;
   verticalStrutR2.position.z = roomz/2;
+  verticalStrutR2.castShadow = true;
   scene.add(verticalStrutR2);
 }
 
@@ -192,6 +203,8 @@ export function addHeronLissus(scene) {
           object.rotation.y = rad(180);
           object.position.z = 1.75;
           object.position.y = -0.9;
+          object.castShadow = true;
+          object.receiveShadow = true;
           scene.add(object)
         }
       )
@@ -210,6 +223,7 @@ export function addHeronLissus(scene) {
   l 1384 5437
   */
 }
+
 
 export function addLights(scene) {
   //ambient light
@@ -241,15 +255,23 @@ export function addLights(scene) {
   lightR3.translate(x, y, -z);
   lightR3.addToScene(scene);
 
-  let sunx = 0;
+  let sunx = 0.2;
   let suny = 2;
-  let sunz = 1;
-  const sunlight = new THREE.DirectionalLight( 0xffffff, 0.5 );
+  let sunz = 1.5;
+  const sunlight = new THREE.DirectionalLight( 0xfffffa, 0.3 );
+  sunlight.castShadow = true;
+  //OrthographicCamera( left : Number, right : Number, top : Number, bottom : Number, near : Number, far : Number )
+  //sunlight.shadow.camera = new THREE.OrthographicCamera( -100, 100, 100, -100, 0.5, 1000 )
+  //console.log(sunlight.shadow.camera);
+  const d = 10
+  sunlight.shadow.camera = new THREE.OrthographicCamera( -d, d, d, -d, 0.5, 1000 )
   sunlight.position.set(sunx,suny,sunz);
   scene.add( sunlight );
   const sphere_geom = new THREE.SphereGeometry(0.5);
   const red_mat = new THREE.MeshBasicMaterial({color:0xff0000});
   const targeter = new THREE.Mesh(sphere_geom, red_mat);
   targeter.position.set(sunx,suny,sunz);
-  scene.add(targeter);
+  //scene.add(targeter);
+  const origin = new THREE.Mesh(sphere_geom, red_mat);
+  //scene.add(origin);
 }
