@@ -3,10 +3,12 @@
  * defined in prefabs.js.
  */
 import * as Prefabs from './prefabs.js';
-import * as THREE from 'three';
+import * as THREE from  "../node_modules/three/build/three.module.js";
 import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
 import { MTLLoader } from 'three/addons/loaders/MTLLoader.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+//import heronLissusMTL from "../resources/Heron_Lissus/obj&mtl/Heron_Lissus.mtl";
 
 
 function rad(deg) {
@@ -199,9 +201,11 @@ function testAnimate(prefab) {
 }
 
 export function addHeronLissus(scene) {
+  //console.log(import.meta.env.BASE_URL);
   const mtlLoader = new MTLLoader();
   //const objLoader = new OBJLoader();
-  mtlLoader.setPath( './resources/Heron_Lissus/obj&mtl_pose2/' );
+  //mtlLoader.setPath( import.meta.env.BASE_URL + '~caxchen/asg5%20(three%20js)/office_world/resources/Heron_Lissus/obj&mtl_pose2/' );
+  mtlLoader.setPath( import.meta.env.BASE_URL + 'resources/Heron_Lissus/obj&mtl_pose2/' );
   mtlLoader.load(
     'Heron_Lissus.mtl',
     function(materials) {
@@ -209,7 +213,8 @@ export function addHeronLissus(scene) {
       const objLoader = new OBJLoader();
       objLoader.setMaterials(materials);
       objLoader.load(
-        '../resources/Heron_Lissus/obj&mtl_pose2/Heron_Lissus.obj',
+        //import.meta.env.BASE_URL + '~caxchen/asg5%20(three%20js)/office_world/resources/Heron_Lissus/obj&mtl_pose2/Heron_Lissus.obj',
+        import.meta.env.BASE_URL + 'resources/Heron_Lissus/obj&mtl_pose2/Heron_Lissus.obj',
         function(object) {
           //fix the emissive not showing
           object.children[0].material.emissive = new THREE.Color(0xffffff);

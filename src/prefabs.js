@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import * as THREE from  "../node_modules/three/build/three.module.js";
 
 function rad(deg) {
     return deg * (Math.PI/180);
@@ -59,7 +59,9 @@ const blackFabric_mat = new THREE.MeshPhysicalMaterial({
     sheen: 1,
     //sheenRoughness:0.1
 })
-const blackScreenTexture = new THREE.TextureLoader().load( "resources/keyboard.png" );
+//https://people.ucsc.edu/~caxchen/asg5%20(three%20js)/office_world/dist/resources/Daylight_Box/left.png
+//const blackScreenTexture = new THREE.TextureLoader().load( import.meta.env.BASE_URL+"~caxchen/asg5%20(three%20js)/office_world/resources/keyboard.png" );
+const blackScreenTexture = new THREE.TextureLoader().load( import.meta.env.BASE_URL+"resources/keyboard.png" );
 blackScreenTexture.wrapS = THREE.RepeatWrapping;
 blackScreenTexture.wrapT = THREE.RepeatWrapping;
 blackScreenTexture.repeat.set( 1,1 );

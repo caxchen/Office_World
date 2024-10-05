@@ -1,5 +1,5 @@
 import '../style.css'
-import * as THREE from 'three';
+import * as THREE from  "../node_modules/three/build/three.module.js";
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { GlitchPass } from 'three/addons/postprocessing/GlitchPass.js';
@@ -45,7 +45,7 @@ function main() {
   activeCamera = camera;
 
   const renderer = new THREE.WebGLRenderer({antialias: true, canvas});
-  console.log(renderer.getRenderTarget());
+
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   //const composer = new EffectComposer( renderer );
@@ -166,32 +166,38 @@ function createSkybox(scene) {
   const loader = new THREE.TextureLoader();
   const color = null;//0xededed;
   const right = new THREE.MeshBasicMaterial({
-    map: loader.load("resources/Daylight_Box/right.png"),
+    //map: loader.load(import.meta.env.BASE_URL + '~caxchen/asg5%20(three%20js)/office_world/resources/Daylight_Box/right.png'),
+    map: loader.load(import.meta.env.BASE_URL + 'resources/Daylight_Box/right.png'),
     side: THREE.DoubleSide,
     color: color
   });
   const left = new THREE.MeshBasicMaterial({
-    map: loader.load("resources/Daylight_Box/left.png"),
+    //map: loader.load(import.meta.env.BASE_URL + '~caxchen/asg5%20(three%20js)/office_world/resources/Daylight_Box/left.png'),
+    map: loader.load(import.meta.env.BASE_URL + 'resources/Daylight_Box/left.png'),
     side: THREE.DoubleSide,
     color: color
   });
   const top = new THREE.MeshBasicMaterial({
-    map: loader.load("resources/Daylight_Box/top.png"),
+    //map: loader.load(import.meta.env.BASE_URL + '~caxchen/asg5%20(three%20js)/office_world/resources/Daylight_Box/top.png'),
+    map: loader.load(import.meta.env.BASE_URL + 'resources/Daylight_Box/top.png'),
     side: THREE.DoubleSide,
     color: color
   });
   const bottom = new THREE.MeshBasicMaterial({
-    map: loader.load("resources/Daylight_Box/bottom.png"),
+    //map: loader.load(import.meta.env.BASE_URL + '~caxchen/asg5%20(three%20js)/office_world/resources/Daylight_Box/bottom.png'),
+    map: loader.load(import.meta.env.BASE_URL + 'resources/Daylight_Box/bottom.png'),
     side: THREE.DoubleSide,
     color: color
   });
   const front = new THREE.MeshBasicMaterial({
-    map: loader.load("resources/Daylight_Box/front.png"),
+    //map: loader.load(import.meta.env.BASE_URL + '~caxchen/asg5%20(three%20js)/office_world/resources/Daylight_Box/front.png'),
+    map: loader.load(import.meta.env.BASE_URL + 'resources/Daylight_Box/front.png'),
     side: THREE.DoubleSide,
     color: color
   });
   const back = new THREE.MeshBasicMaterial({
-    map: loader.load("resources/Daylight_Box/back.png"),
+    //map: loader.load(import.meta.env.BASE_URL + '~caxchen/asg5%20(three%20js)/office_world/resources/Daylight_Box/back.png'),
+    map: loader.load(import.meta.env.BASE_URL + 'resources/Daylight_Box/back.png'),
     side: THREE.DoubleSide,
     color: color
   });
