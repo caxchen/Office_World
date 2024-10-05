@@ -7,4 +7,4 @@ In this project, I made a simple 3d environment of a modern looking office with 
 
 ![Office View](showcase1.png)
 
-![First Person View](showcase2.png)
+![First Person View](screen.gif)
